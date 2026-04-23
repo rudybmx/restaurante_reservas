@@ -458,159 +458,165 @@
             border: 1px solid rgba(0, 0, 0, .15)
         }
 
-        /* Planta do salão */
-        .salao-planta {
+        /* Planta do salão (Design Karuby) */
+        .restaurant {
             position: relative;
-            width: 820px;
-            height: 680px;
-            background: linear-gradient(135deg, #f9f7f2 0%, #f4f1ea 100%);
-            border-radius: 16px;
-            border: 2px solid var(--border2);
+            width: 1280px;
+            height: 780px;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    #967856 0px,
+                    #9f8160 2px,
+                    #967856 4px,
+                    #8e7050 30px,
+                    #967856 32px,
+                    #8e7050 34px,
+                    #886c4c 58px,
+                    #967856 60px
+                ),
+                #967856;
+            border: 10px solid #5a4430;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
             overflow: hidden;
             margin: 0 auto;
         }
 
-        /* Paredes / ambiente */
-        .salao-planta::before {
+        .restaurant::before {
             content: '';
             position: absolute;
-            inset: 10px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
+            inset: 0;
+            background:
+                repeating-linear-gradient(90deg, transparent 0px, transparent 158px, rgba(0,0,0,0.15) 158px, rgba(0,0,0,0.15) 160px, transparent 160px, transparent 320px),
+                repeating-linear-gradient(2deg, transparent 0px, transparent 12px, rgba(0,0,0,0.03) 12px, rgba(0,0,0,0.03) 14px),
+                repeating-linear-gradient(-1deg, transparent 0px, transparent 18px, rgba(255,255,255,0.02) 18px, rgba(255,255,255,0.02) 20px),
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.04) 0px, transparent 3px, transparent 57px, rgba(0,0,0,0.06) 60px);
             pointer-events: none;
-            z-index: 0;
         }
 
-        /* Zonas de setor */
-        .setor-zone {
+        .janela-wrapper {
             position: absolute;
-            border-radius: 10px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding-top: 8px;
-            font-family: var(--font-title);
-            font-size: .68rem;
-            font-weight: 700;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            pointer-events: none;
-            z-index: 1;
+            bottom: -10px;
+            left: 30px;
+            right: 135px;
+            height: 16px;
+            background: #87CEEB;
+            border-top: 3px solid #5a9fc8;
+            z-index: 10;
         }
 
-        .setor-caixa {
-            background: rgba(251, 87, 42, .04);
-            border: 1px dashed rgba(251, 87, 42, .2);
-            color: rgba(251, 87, 42, .5);
-            left: 16px;
-            top: 16px;
-            width: 190px;
-            height: 648px
-        }
-
-        .setor-centro {
-            background: rgba(87, 42, 251, .03);
-            border: 1px dashed rgba(87, 42, 251, .15);
-            color: rgba(87, 42, 251, .4);
-            left: 224px;
-            top: 16px;
-            width: 360px;
-            height: 648px
-        }
-
-        .setor-janela {
-            background: rgba(42, 251, 87, .03);
-            border: 1px dashed rgba(22, 163, 74, .2);
-            color: rgba(22, 163, 74, .5);
-            left: 602px;
-            top: 16px;
-            width: 200px;
-            height: 648px
-        }
-
-        /* Corredores */
-        .corredor {
+        .janela-label {
             position: absolute;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: .58rem;
-            font-weight: 700;
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            color: var(--text3)
-        }
-
-        .corredor-v {
-            writing-mode: vertical-rl
-        }
-
-        /* Estrutura fixa */
-        .estrutura {
-            position: absolute;
-            z-index: 2;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: .62rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: .05em;
-        }
-
-        .estrutura-banheiro {
-            background: #ddd;
-            color: #666;
-            border: 1px solid #bbb;
-            width: 70px;
-            height: 50px;
-            left: 20px;
-            bottom: 20px
-        }
-
-        .estrutura-caixa-reg {
-            background: #e8e0f8;
-            color: var(--accent);
-            border: 1px solid rgba(87, 42, 251, .3);
-            width: 60px;
-            height: 40px;
-            left: 24px;
-            top: 24px
-        }
-
-        .estrutura-porta {
-            background: #fff8e8;
-            color: var(--warn);
-            border: 1px dashed var(--warn);
-            width: 80px;
-            height: 24px;
-            bottom: 0;
+            bottom: 3px;
             left: 50%;
             transform: translateX(-50%);
-            border-bottom: none;
-            border-radius: 6px 6px 0 0;
-            font-size: .58rem
+            font-size: 10px;
+            font-weight: bold;
+            color: #1a5a7a;
+            letter-spacing: 3px;
+            text-transform: uppercase;
         }
 
-        /* Mesa visual SVG-like */
-        .mesa-visual {
+        .janela-line {
             position: absolute;
-            z-index: 10;
+            bottom: 0;
+            left: 30px;
+            right: 135px;
+            height: 4px;
+            background: linear-gradient(90deg, #5a9fc8, #87CEEB, #5a9fc8);
+            border-radius: 2px;
+            z-index: 9;
+        }
+
+        .corredor-label {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .corredor-1 { top: 228px; height: 30px; }
+        .corredor-2 { top: 490px; height: 30px; }
+
+        .table-group {
+            position: absolute;
+            transition: transform 0.2s;
+        }
+        
+        .table-group:hover {
+            z-index: 50;
+            transform: scale(1.02);
+        }
+
+        .table-body {
+            background: linear-gradient(145deg, #3a3a3a, #2d2d2d, #252525);
+            border: 2px solid #1a1a1a;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 3px;
+            box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            position: absolute;
+            z-index: 5;
+            overflow: hidden;
             cursor: pointer;
-            transition: transform .18s, filter .18s;
         }
 
-        .mesa-visual:hover {
-            transform: scale(1.06);
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .18));
-            z-index: 20
+        /* Cores de Status para Mesas */
+        .table-body.status-livre { border-color: #16a34a; box-shadow: 0 0 15px rgba(22, 163, 74, 0.4); }
+        .table-body.status-reservada { border-color: #d97706; box-shadow: 0 0 15px rgba(217, 119, 6, 0.4); }
+        .table-body.status-ocupada { border-color: #dc2626; box-shadow: 0 0 15px rgba(220, 38, 38, 0.4); }
+        .table-body.status-manutencao { border-color: #94a3b8; opacity: 0.7; }
+
+        .table-body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(125deg, transparent 20%, rgba(255,255,255,0.04) 30%, transparent 40%),
+                linear-gradient(200deg, transparent 50%, rgba(255,255,255,0.03) 60%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .mesa-visual svg {
-            display: block
+        .table-label {
+            font-family: var(--font-title);
+            font-size: 16px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1;
+            z-index: 4;
         }
+
+        .table-pax {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 1px;
+            z-index: 4;
+        }
+
+        .chair-svg {
+            position: absolute;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        .t4 { width: 70px; height: 50px; }
+        .t6 { width: 90px; height: 58px; }
+        .t8 { width: 130px; height: 58px; }
+
 
         /* ─── LISTA ─── */
         .list-controls {
@@ -1310,29 +1316,30 @@
                 <div class="salao-header">
                     <h2>Planta do Salão</h2>
                     <div class="legend">
-                        <div class="legend-item">
-                            <div class="legend-dot" style="background:#e8f5e9;border-color:#a5d6a7"></div> Livre
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot" style="background:#fff3e0;border-color:#ffcc02"></div> Reservada
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot" style="background:#ffebee;border-color:#ef9a9a"></div> Ocupada
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-dot" style="background:#fff9c4;border-color:#f9a825"></div> Manutenção
-                        </div>
-                        <div class="legend-item"><span style="font-size:.8rem">🟢</span> Cadeira ocupada &nbsp;<span
-                                style="font-size:.8rem">🔴</span> Cadeira sobressalente</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div> Livre</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#d97706"></div> Reservada</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div> Ocupada</div>
+                        <div class="legend-item"><div class="legend-dot" style="background:#94a3b8"></div> Manutenção</div>
                     </div>
                 </div>
-                <div id="salao-grid" style="overflow-x:auto">
-                    <div class="loading">
-                        <div class="spinner"></div> Carregando mesas...
+                
+                <div id="salao-grid" style="overflow-x:auto; padding: 20px 0;">
+                    <div class="restaurant" id="restaurant-floor">
+                        <div class="janela-line"></div>
+                        <div class="janela-wrapper">
+                            <div class="janela-label">JANELA</div>
+                        </div>
+
+                        <div class="corredor-label corredor-1">— CIRCULAÇÃO —</div>
+                        <div class="corredor-label corredor-2">— CIRCULAÇÃO —</div>
+                        
+                        <!-- As mesas serão inseridas aqui dinamicamente pelo renderMapa -->
+                        <div id="mesas-container"></div>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- VIEW LISTA -->
         <div class="view" id="view-lista">
@@ -1641,284 +1648,192 @@
         }
 
 
-        // ─── MAPA VISUAL ───
-        // Estilo: mesa retangular com cadeiras quadradas nas laterais (idêntico à foto)
-        // ViewBox 1200x560 — landscape, cabe na tela sem scroll
-        // Layout fiel ao papel:
-        //   CAIXA  (x 15–195):  mesas 19-24 coluna + 25(8p)+26(4p) base
-        //   CENTRO (x 215–730): mesas 11-18 distribuídas
-        //   JANELA (x 750–985): mesas 1-10 duas colunas
+        // ─── MAPA VISUAL (KARUBY STYLE) ───
+        function makeChairSVG(cW, cH, rotation, left, top) {
+            const ns = 'http://www.w3.org/2000/svg';
+            const svg = document.createElementNS(ns, 'svg');
+            svg.setAttribute('width', cW);
+            svg.setAttribute('height', cH);
+            svg.setAttribute('viewBox', `0 0 ${cW} ${cH}`);
+            svg.classList.add('chair-svg');
+            svg.style.left = left + 'px';
+            svg.style.top = top + 'px';
+            svg.style.transform = `rotate(${rotation}deg)`;
+
+            const W = cW, H = cH;
+            const legColor = '#5a3a1e', legStroke = '#3d2510';
+            const seatBase = '#4a2a12', seatStroke = '#2e1808';
+            const cushionMain = '#6b3d1f', cushionDark = '#4a2a12', cushionStroke = '#2e1808';
+            const backMain = '#3a2010', backArc = '#4a2a15', backStroke = '#1e0e04';
+            const stitchColor = 'rgba(120,80,40,0.55)', sheen = 'rgba(200,160,100,0.18)';
+
+            function el(tag, attrs) {
+                const e = document.createElementNS(ns, tag);
+                Object.entries(attrs).forEach(([k, v]) => e.setAttribute(k, v));
+                return e;
+            }
+
+            // Pernas
+            const legR = W * 0.072, legPad = W * 0.17;
+            [[legPad, H * 0.38], [W - legPad, H * 0.38], [legPad, H * 0.92], [W - legPad, H * 0.92]].forEach(([lx, ly]) => {
+                svg.appendChild(el('ellipse', { cx: lx + 1, cy: ly + 1.5, rx: legR, ry: legR * 0.7, fill: 'rgba(0,0,0,0.35)' }));
+                svg.appendChild(el('circle', { cx: lx, cy: ly, r: legR, fill: legColor, stroke: legStroke, 'stroke-width': '1' }));
+            });
+
+            // Assento base
+            const sX = W * 0.09, sY = H * 0.32, sW = W * 0.82, sHt = H * 0.64, sRx = W * 0.10;
+            svg.appendChild(el('rect', { x: sX + 1, y: sY + 2, width: sW, height: sHt, rx: sRx, fill: 'rgba(0,0,0,0.30)' }));
+            svg.appendChild(el('rect', { x: sX, y: sY, width: sW, height: sHt, rx: sRx, fill: seatBase, stroke: seatStroke, 'stroke-width': '1.2' }));
+
+            // Almofada
+            const pX = sX + sW * 0.07, pY = sY + sHt * 0.06, pW = sW * 0.86, pH = sHt * 0.86, pRx = W * 0.09;
+            svg.appendChild(el('rect', { x: pX, y: pY, width: pW, height: pH, rx: pRx, fill: cushionDark, stroke: cushionStroke, 'stroke-width': '1' }));
+            svg.appendChild(el('rect', { x: pX + pW * 0.06, y: pY + pH * 0.06, width: pW * 0.88, height: pH * 0.88, rx: pRx * 0.8, fill: cushionMain }));
+            svg.appendChild(el('rect', { x: pX + pW * 0.13, y: pY + pH * 0.13, width: pW * 0.74, height: pH * 0.74, rx: pRx * 0.65, fill: 'none', stroke: stitchColor, 'stroke-width': '0.9', 'stroke-dasharray': '2.5 2' }));
+
+            // Encosto
+            const bW = W * 0.78, bH = H * 0.30, bX = (W - bW) / 2, bY = H * 0.00, bRx = W * 0.12;
+            svg.appendChild(el('rect', { x: bX + 1.5, y: bY + 2.5, width: bW, height: bH, rx: bRx, fill: 'rgba(0,0,0,0.38)' }));
+            svg.appendChild(el('rect', { x: bX, y: bY, width: bW, height: bH, rx: bRx, fill: backMain, stroke: backStroke, 'stroke-width': '1.2' }));
+            
+            return svg;
+        }
+
+        function buildTable(mesa, res, bodyClass, topCount, botCount, left, top, padX = 30) {
+            const container = document.getElementById('mesas-container');
+            const sizes = { 't4': { w: 70, h: 50 }, 't6': { w: 90, h: 58 }, 't8': { w: 130, h: 58 } };
+            const dim = sizes[bodyClass] || { w: 90, h: 58 };
+            const W = dim.w, H = dim.h;
+            const cW = 28, cH = 22, gap = 4, chairGap = 3;
+
+            const group = document.createElement('div');
+            group.className = 'table-group';
+            group.style.left = left + 'px';
+            group.style.top = top + 'px';
+            group.style.width = (W + padX * 2) + 'px';
+            group.style.height = (H + (cH + gap) * 2) + 'px';
+
+            const status = !mesa.ativa ? 'manutencao' : mesa.em_manutencao ? 'manutencao' : res ? res.status : 'livre';
+            
+            const body = document.createElement('div');
+            body.className = `table-body ${bodyClass} status-${status}`;
+            body.style.left = padX + 'px';
+            body.style.top = (cH + gap) + 'px';
+            body.style.width = W + 'px';
+            body.style.height = H + 'px';
+            body.onclick = () => clickMesa(mesa.id);
+
+            // Grade de churrasqueira
+            const grillW = W * 0.45, grillH = H * 0.50;
+            const grillSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            grillSvg.setAttribute('width', grillW); grillSvg.setAttribute('height', grillH);
+            grillSvg.style.position = 'absolute'; grillSvg.style.left = ((W - grillW) / 2) + 'px';
+            grillSvg.style.top = '18px'; grillSvg.style.zIndex = '3';
+            
+            const gNs = 'http://www.w3.org/2000/svg';
+            const gRect = document.createElementNS(gNs, 'rect');
+            gRect.setAttribute('width', grillW); gRect.setAttribute('height', grillH);
+            gRect.setAttribute('rx', '2'); gRect.setAttribute('fill', '#1a1210');
+            grillSvg.appendChild(gRect);
+            
+            // Barras da grade
+            for (let i = 1; i <= 4; i++) {
+                const line = document.createElementNS(gNs, 'line');
+                const by = (grillH / 5) * i;
+                line.setAttribute('x1', '2'); line.setAttribute('y1', by);
+                line.setAttribute('x2', grillW - 2); line.setAttribute('y2', by);
+                line.setAttribute('stroke', '#555'); line.setAttribute('stroke-width', '1');
+                grillSvg.appendChild(line);
+            }
+            body.appendChild(grillSvg);
+
+            const lbl = document.createElement('div');
+            lbl.className = 'table-label';
+            lbl.textContent = mesa.numero;
+            body.appendChild(lbl);
+
+            const pax = document.createElement('div');
+            pax.className = 'table-pax';
+            pax.textContent = res ? `${res.nome.split(' ')[0]} (${res.total_pessoas})` : `(${mesa.capacidade})`;
+            body.appendChild(pax);
+
+            group.appendChild(body);
+
+            // Cadeiras
+            const ox = padX, oy = cH + gap;
+            for (let i = 0; i < topCount; i++) {
+                const totalW = topCount * cW + (topCount - 1) * chairGap;
+                const cx = ox + (W - totalW) / 2 + i * (cW + chairGap);
+                group.appendChild(makeChairSVG(cW, cH, 0, cx, oy - cH - gap));
+            }
+            for (let i = 0; i < botCount; i++) {
+                const totalW = botCount * cW + (botCount - 1) * chairGap;
+                const cx = ox + (W - totalW) / 2 + i * (cW + chairGap);
+                group.appendChild(makeChairSVG(cW, cH, 180, cx, oy + H + gap));
+            }
+
+            container.appendChild(group);
+        }
 
         function reserva_existe(s) { return s && ['confirmada', 'aguardando', 'ocupada'].includes(s); }
 
-        // ── Dimensões da mesa por capacidade ──
-        // mW=largura, mH=altura da superfície da mesa
-        // cS=tamanho das cadeirinhas (quadrado), gap=folga entre mesa e cadeira
-        function getMesaDef(cap) {
-            if (cap >= 8) return { mW: 80, mH: 30, cS: 11, gap: 4 };
-            if (cap >= 6) return { mW: 58, mH: 26, cS: 10, gap: 4 };
-            return { mW: 40, mH: 26, cS: 10, gap: 4 }; // 4p
-        }
-
-        // ── Gera SVG de UMA mesa (cx,cy = centro) ──
-        function mesaSVG(m, res) {
-            const pos = MESA_LAYOUT[m.numero];
-            if (!pos) return '';
-            const { cx, cy } = pos, cap = m.capacidade;
-            const { mW, mH, cS, gap } = getMesaDef(cap);
-            const pessoas = res ? res.total_pessoas : 0;
-            const extras = res ? (res.cadeiras_extras || 0) : 0;
-            const temRes = reserva_existe(res?.status);
-
-            // Cores base: VERDE livre, VERMELHO reservada, CINZA inativa, ÂMBAR manutenção
-            let mFill, mStroke, tColor;
-            if (!m.ativa) { mFill = '#F1F5F9'; mStroke = '#94A3B8'; tColor = '#94A3B8'; }
-            else if (m.em_manutencao) { mFill = '#FFFBEB'; mStroke = '#F59E0B'; tColor = '#B45309'; }
-            else if (!temRes) { mFill = '#F0FDF4'; mStroke = '#16A34A'; tColor = '#15803D'; }
-            else { mFill = '#FFF1F2'; mStroke = '#DC2626'; tColor = '#991B1B'; }
-
-            // Cor das cadeiras
-            const cFill = !m.ativa ? '#E2E8F0' : m.em_manutencao ? '#FEF9C3' : !temRes ? '#BBFCCA' : '#FECACA';
-            const cStroke = !m.ativa ? '#94A3B8' : m.em_manutencao ? '#F59E0B' : !temRes ? '#16A34A' : '#DC2626';
-            const cFillX = '#FCA5A5'; // sobressalente (extra)
-            const cStrokeX = '#EF4444';
-
-            const x0 = cx - mW / 2, y0 = cy - mH / 2; // topo-esq da mesa
-            let seats = [];
-
-            if (cap <= 4) {
-                // 4p: 1 cima, 1 baixo, 1 esq, 1 dir — cadeiras centradas
-                seats = [
-                    { x: cx, y: y0 - gap - cS / 2, idx: 0 }, // top
-                    { x: cx, y: y0 + mH + gap + cS / 2, idx: 1 }, // bottom
-                    { x: x0 - gap - cS / 2, y: cy, idx: 2 }, // left
-                    { x: x0 + mW + gap + cS / 2, y: cy, idx: 3 }, // right
-                ];
-            } else if (cap <= 6) {
-                // 6p: 2 cima, 2 baixo, 1 esq, 1 dir
-                const off = mW * 0.22;
-                seats = [
-                    { x: cx - off, y: y0 - gap - cS / 2, idx: 0 },
-                    { x: cx + off, y: y0 - gap - cS / 2, idx: 1 },
-                    { x: x0 + mW + gap + cS / 2, y: cy, idx: 2 },
-                    { x: cx + off, y: y0 + mH + gap + cS / 2, idx: 3 },
-                    { x: cx - off, y: y0 + mH + gap + cS / 2, idx: 4 },
-                    { x: x0 - gap - cS / 2, y: cy, idx: 5 },
-                ];
-            } else {
-                // 8p: 3 cima, 3 baixo, 1 esq, 1 dir  (igual à foto)
-                const s = mW * 0.28;
-                seats = [
-                    { x: cx - s, y: y0 - gap - cS / 2, idx: 0 },
-                    { x: cx, y: y0 - gap - cS / 2, idx: 1 },
-                    { x: cx + s, y: y0 - gap - cS / 2, idx: 2 },
-                    { x: x0 + mW + gap + cS / 2, y: cy, idx: 3 },
-                    { x: cx + s, y: y0 + mH + gap + cS / 2, idx: 4 },
-                    { x: cx, y: y0 + mH + gap + cS / 2, idx: 5 },
-                    { x: cx - s, y: y0 + mH + gap + cS / 2, idx: 6 },
-                    { x: x0 - gap - cS / 2, y: cy, idx: 7 },
-                ];
-            }
-
-            // Cadeiras extras (sobressalentes) — adiciona nas pontas do lado maior
-            for (let e = 0; e < extras; e++) {
-                const lado = e % 2 === 0 ? 1 : -1;
-                seats.push({ x: cx + lado * (mW / 2 + gap + cS / 2 + cS + 4), y: cy, idx: cap + e, extra: true });
-            }
-
-            // Render cadeiras
-            let cadSVG = '';
-            seats.forEach(s => {
-                const isExtra = s.extra || s.idx >= cap;
-                const f = isExtra ? cFillX : cFill;
-                const st = isExtra ? cStrokeX : cStroke;
-                const sx = (s.x - cS / 2).toFixed(1), sy = (s.y - cS / 2).toFixed(1);
-                cadSVG += `<rect x="${sx}" y="${sy}" width="${cS}" height="${cS}" rx="${(cS * 0.35).toFixed(1)}"
-      fill="${f}" stroke="${st}" stroke-width="1.5"/>`;
-                if (isExtra && temRes)
-                    cadSVG += `<text x="${s.x.toFixed(1)}" y="${(s.y + 1).toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
-        font-size="7" font-weight="800" fill="#B91C1C">+</text>`;
-            });
-
-            // Mesa (retângulo)
-            const fid = `f${m.id.replace(/-/g, '')}`;
-            const glowC = !m.ativa ? null : m.em_manutencao ? 'rgba(245,158,11,.5)' : !temRes ? 'rgba(22,163,74,.45)' : 'rgba(220,38,38,.45)';
-            const filterDef = glowC ? `<filter id="${fid}" x="-50%" y="-100%" width="200%" height="300%">
-    <feDropShadow dx="0" dy="0" stdDeviation="4" flood-color="${glowC}"/>
-  </filter>`: '';
-
-            const mesaRect = `<rect x="${x0}" y="${y0}" width="${mW}" height="${mH}" rx="4"
-    fill="${mFill}" stroke="${mStroke}" stroke-width="2"
-    ${glowC ? `filter="url(#${fid})"` : ''}/>`;
-
-            // Número
-            const fs = cap >= 8 ? 11 : 10;
-            const numSVG = `<text x="${cx}" y="${cy + 1}" text-anchor="middle" dominant-baseline="middle"
-    font-family="Bricolage Grotesque,sans-serif" font-size="${fs}" font-weight="800" fill="${tColor}">${m.numero}</text>`;
-
-            // Info reserva (nome + horário) — abaixo das cadeiras do fundo
-            let infoSVG = '';
-            if (temRes && res) {
-                const iy = y0 + mH + gap + cS + 13;
-                infoSVG = `
-      <text x="${cx}" y="${iy}" text-anchor="middle"
-        font-family="DM Sans,sans-serif" font-size="8" font-weight="700" fill="#374151"
-        >${res.nome.split(' ')[0].substring(0, 10)}</text>
-      <text x="${cx}" y="${iy + 10}" text-anchor="middle"
-        font-family="DM Mono,sans-serif" font-size="7" fill="#9CA3AF"
-        >${res.horario?.substring(0, 5)}·${res.total_pessoas}p</text>`;
-            }
-
-            return `<defs>${filterDef}</defs>
-<g class="mesa-g" onclick="clickMesa('${m.id}')"
-   style="cursor:${m.ativa && !m.em_manutencao ? 'pointer' : 'default'}">
-  ${cadSVG}${mesaRect}${numSVG}${infoSVG}
-</g>`;
-        }
-
-        // ── Layout das mesas — fiel ao papel (landscape, de cima p/ baixo) ──
-        // Papel rodado: CAIXA à esquerda, JANELA à direita, BANHEIRO embaixo-esq, ENTRADA embaixo-centro
-        // ViewBox 1200x560
-        //
-        // Espaçamento vertical entre mesas 4p (mH=26): linha cada 80px  → cy: 70,150,230,310,390,470
-        // CAIXA cx ≈ 100
-        // CENTRO: área x 215-730
-        // JANELA: duas colunas x≈775 e x≈895, cy alinhados
-
-        const MESA_LAYOUT = {
-            // ── CAIXA ──  (coluna única x=100, espaçamento 80px)
-            19: { cx: 100, cy: 72 },
-            20: { cx: 100, cy: 152 },
-            21: { cx: 100, cy: 232 },
-            22: { cx: 100, cy: 312 },
-            23: { cx: 100, cy: 392 },
-            24: { cx: 100, cy: 472 },
-            // 25(8p) e 26(4p) na base lado a lado
-            25: { cx: 82, cy: 528 },  // 8p (mW=80) → ocupa mais
-            26: { cx: 162, cy: 528 },  // 4p
-
-            // ── CENTRO ──
-            // Topo (cy=72): 11(8p), 12(8p), 17(4p) alinhados
-            11: { cx: 300, cy: 72 },
-            12: { cx: 430, cy: 72 },
-            17: { cx: 540, cy: 72 },
-            // Meio
-            13: { cx: 320, cy: 210 },
-            14: { cx: 450, cy: 330 },
-            // Base
-            15: { cx: 320, cy: 440 },
-            16: { cx: 450, cy: 510 },  // 8p
-            18: { cx: 570, cy: 430 },  // 6p
-
-            // ── JANELA/BIS — duas colunas ──
-            // Coluna esq x=775, coluna dir x=895
-            6: { cx: 775, cy: 72 },
-            7: { cx: 895, cy: 72 },
-            5: { cx: 775, cy: 168 },
-            8: { cx: 895, cy: 168 },
-            4: { cx: 775, cy: 264 },
-            9: { cx: 895, cy: 264 },
-            3: { cx: 775, cy: 360 },
-            10: { cx: 895, cy: 360 },
-            2: { cx: 775, cy: 456 },
-            1: { cx: 835, cy: 528 },
-        };
-
         function renderMapa() {
-            const wrap = document.getElementById('salao-grid');
+            const container = document.getElementById('mesas-container');
+            if (!container) return;
+            container.innerHTML = '';
+
             if (!STATE.mesas.length) {
-                wrap.innerHTML = '<div class="empty"><div class="empty-icon">🪑</div><h3>Nenhuma mesa cadastrada</h3></div>';
+                container.innerHTML = '<div class="empty"><h3>Nenhuma mesa carregada</h3></div>';
                 return;
             }
+
             const reservaMap = {};
             STATE.reservas.forEach(r => { if (reserva_existe(r.status)) reservaMap[r.mesa_id] = r; });
 
-            let svgMesas = '';
-            STATE.mesas.forEach(m => { svgMesas += mesaSVG(m, reservaMap[m.id]); });
+            // ZONA SUPERIOR
+            (function () {
+                const topY = 88, gapX = 37; let cursor = 10;
+                const m25 = STATE.mesas.find(m => String(m.numero) === '25');
+                if (m25) buildTable(m25, reservaMap[m25.id], 't8', 4, 4, cursor, topY);
+                cursor += 130 + 60 + gapX;
 
-            const W = 1000, H = 570;
-            const C1 = 210, C2 = 745;
+                ['24', '23', '22', '21', '20', '19'].forEach(num => {
+                    const m = STATE.mesas.find(x => String(x.numero) === num);
+                    if (m) buildTable(m, reservaMap[m.id], 't4', 2, 2, cursor, topY);
+                    cursor += 70 + 60 + gapX;
+                });
+            })();
 
-            wrap.innerHTML = `<style>
-    #sv{width:100%;height:auto;display:block;}
-    .mesa-g{transition:transform .15s,filter .15s;transform-box:fill-box;transform-origin:center;}
-    .mesa-g:hover{transform:scale(1.07);filter:brightness(1.05) drop-shadow(0 3px 8px rgba(0,0,0,.18));}
-  </style>
-  <svg id="sv" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"
-    style="border-radius:12px;overflow:visible;max-height:calc(100vh - 260px)">
+            // ZONA INTERMEDIÁRIA
+            (function () {
+                const midY = 298, gapX = 27; let cursor = 10;
+                const m18 = STATE.mesas.find(m => String(m.numero) === '18');
+                if (m18) buildTable(m18, reservaMap[m18.id], 't6', 3, 3, cursor, midY);
+                cursor += 90 + 60 + gapX;
 
-    <defs>
-      <pattern id="pt" width="24" height="24" patternUnits="userSpaceOnUse">
-        <circle cx="12" cy="12" r=".8" fill="rgba(0,0,0,.07)"/>
-      </pattern>
-    </defs>
+                const m16 = STATE.mesas.find(m => String(m.numero) === '16');
+                if (m16) buildTable(m16, reservaMap[m16.id], 't8', 4, 4, cursor, midY);
+                cursor += 130 + 60 + gapX;
 
-    <!-- Fundo -->
-    <rect width="${W}" height="${H}" fill="#F9F7F3" rx="12"/>
-    <rect width="${W}" height="${H}" fill="url(#pt)" rx="12"/>
-    <rect x="7" y="7" width="${W - 14}" height="${H - 14}" rx="9"
-      fill="none" stroke="#E5E1D8" stroke-width="1.2"/>
+                ['15', '14', '13', '12'].forEach(num => {
+                    const m = STATE.mesas.find(x => String(x.numero) === num);
+                    if (m) buildTable(m, reservaMap[m.id], 't4', 2, 2, cursor, midY);
+                    cursor += 70 + 60 + gapX;
+                });
 
-    <!-- Zona CAIXA -->
-    <rect x="11" y="11" width="${C1 - 15}" height="${H - 22}" rx="7"
-      fill="rgba(251,87,42,.04)" stroke="rgba(251,87,42,.22)" stroke-width="1" stroke-dasharray="5,3"/>
-    <text x="${C1 / 2}" y="28" text-anchor="middle"
-      font-family="Bricolage Grotesque,sans-serif" font-size="9" font-weight="800"
-      fill="rgba(251,87,42,.55)" letter-spacing="1.5">CAIXA</text>
+                const m10 = STATE.mesas.find(m => String(m.numero) === '10');
+                if (m10) buildTable(m10, reservaMap[m10.id], 't8', 4, 4, cursor, midY);
+            })();
 
-    <!-- Zona CENTRO -->
-    <rect x="${C1 + 3}" y="11" width="${C2 - C1 - 6}" height="${H - 22}" rx="7"
-      fill="rgba(87,42,251,.025)" stroke="rgba(87,42,251,.14)" stroke-width="1" stroke-dasharray="5,3"/>
-    <text x="${(C1 + C2) / 2}" y="28" text-anchor="middle"
-      font-family="Bricolage Grotesque,sans-serif" font-size="9" font-weight="800"
-      fill="rgba(87,42,251,.45)" letter-spacing="1.5">CENTRO</text>
-
-    <!-- Zona JANELA -->
-    <rect x="${C2 + 3}" y="11" width="${W - C2 - 15}" height="${H - 22}" rx="7"
-      fill="rgba(42,251,87,.035)" stroke="rgba(22,163,74,.2)" stroke-width="1" stroke-dasharray="5,3"/>
-    <text x="${(C2 + W) / 2}" y="28" text-anchor="middle"
-      font-family="Bricolage Grotesque,sans-serif" font-size="9" font-weight="800"
-      fill="rgba(22,163,74,.5)" letter-spacing="1.5">JANELA · BIS</text>
-
-    <!-- Corredores -->
-    <line x1="${C1}" y1="35" x2="${C1}" y2="${H - 30}" stroke="#D1CBC0" stroke-width="1" stroke-dasharray="4,5"/>
-    <line x1="${C2}" y1="35" x2="${C2}" y2="${H - 30}" stroke="#D1CBC0" stroke-width="1" stroke-dasharray="4,5"/>
-    <text x="${C1}" y="${H / 2}" text-anchor="middle" dominant-baseline="middle"
-      font-family="DM Sans,sans-serif" font-size="7" font-weight="700" fill="#C8C3BA" letter-spacing="2"
-      transform="rotate(90,${C1},${H / 2})">CIRCULAÇÃO</text>
-    <text x="${C2}" y="${H / 2}" text-anchor="middle" dominant-baseline="middle"
-      font-family="DM Sans,sans-serif" font-size="7" font-weight="700" fill="#C8C3BA" letter-spacing="2"
-      transform="rotate(90,${C2},${H / 2})">CIRCULAÇÃO</text>
-
-    <!-- Caixa registradora -->
-    <rect x="14" y="14" width="72" height="38" rx="5"
-      fill="#EDE9FE" stroke="rgba(87,42,251,.3)" stroke-width="1.5"/>
-    <text x="50" y="30" text-anchor="middle" font-family="DM Sans,sans-serif"
-      font-size="7.5" font-weight="700" fill="rgba(87,42,251,.7)">🖥 CAIXA</text>
-    <text x="50" y="43" text-anchor="middle" font-family="DM Sans,sans-serif"
-      font-size="6.5" fill="rgba(87,42,251,.45)">Registradora</text>
-
-    <!-- Banheiro -->
-    <rect x="14" y="${H - 56}" width="72" height="42" rx="5"
-      fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1.5"/>
-    <text x="50" y="${H - 40}" text-anchor="middle" font-family="DM Sans,sans-serif"
-      font-size="7.5" font-weight="700" fill="#64748B">🚻 BANHEIRO</text>
-
-    <!-- Entrada -->
-    <rect x="${W / 2 - 65}" y="${H - 22}" width="130" height="20" rx="5 5 0 0"
-      fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,2"/>
-    <text x="${W / 2}" y="${H - 9}" text-anchor="middle"
-      font-family="Bricolage Grotesque,sans-serif" font-size="9" font-weight="800" fill="#B45309">🚪 ENTRADA</text>
-
-    <!-- Janela lateral dir -->
-    <rect x="${W - 16}" y="110" width="12" height="80" rx="3"
-      fill="#DBEAFE" stroke="#93C5FD" stroke-width="1.5"/>
-    <text x="${W - 10}" y="150" text-anchor="middle" font-family="DM Sans,sans-serif"
-      font-size="7" font-weight="700" fill="#1D4ED8" transform="rotate(90,${W - 10},150)">JANELA</text>
-
-    <!-- Mesas -->
-    ${svgMesas}
-  </svg>`;
+            // ZONA INFERIOR
+            (function () {
+                const botY = 558, padX = 18, gapX = 13; let cursor = 8;
+                ['9', '8', '7', '6', '5', '4', '3', '2', '1'].forEach(num => {
+                    const m = STATE.mesas.find(x => String(x.numero) === num);
+                    if (m) buildTable(m, reservaMap[m.id], 't6', 3, 3, cursor, botY, padX);
+                    cursor += (90 + padX * 2) + gapX;
+                });
+            })();
         }
 
         function clickMesa(mesaId) {
@@ -1929,6 +1844,7 @@
             if (res) abrirDetalhe(res);
             else abrirModalNovaReserva(mesaId);
         }
+
 
         // ─── LISTA ───
         function filtrarLista() {
