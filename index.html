@@ -575,9 +575,9 @@
         }
 
         /* Cores de Status para Mesas */
-        .table-body.status-livre { border-color: #16a34a; box-shadow: 0 0 15px rgba(22, 163, 74, 0.4); }
-        .table-body.status-reservada { border-color: #d97706; box-shadow: 0 0 15px rgba(217, 119, 6, 0.4); }
-        .table-body.status-ocupada { border-color: #dc2626; box-shadow: 0 0 15px rgba(220, 38, 38, 0.4); }
+        .table-body.status-livre { border-color: #16a34a; box-shadow: 0 0 25px rgba(22, 163, 74, 0.6); background: linear-gradient(145deg, #224c2d, #14301a, #0d2111); }
+        .table-body.status-confirmada, .table-body.status-aguardando, .table-body.status-reservada { border-color: #d97706; box-shadow: 0 0 25px rgba(217, 119, 6, 0.6); background: linear-gradient(145deg, #663806, #452402, #2b1600); }
+        .table-body.status-ocupada { border-color: #dc2626; box-shadow: 0 0 25px rgba(220, 38, 38, 0.6); background: linear-gradient(145deg, #5c1414, #3d0c0c, #260505); }
         .table-body.status-manutencao { border-color: #94a3b8; opacity: 0.7; }
 
         .table-body::before {
@@ -601,9 +601,19 @@
         }
 
         .table-pax {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 2px;
+            z-index: 4;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            letter-spacing: 0.5px;
+        }
+
+        .table-cap {
             font-size: 10px;
             color: rgba(255, 255, 255, 0.5);
-            margin-top: 1px;
+            margin-top: 2px;
             z-index: 4;
         }
 
@@ -1649,7 +1659,7 @@
 
 
         // ─── MAPA VISUAL (KARUBY STYLE) ───
-        function makeChairSVG(cW, cH, rotation, left, top) {
+        function makeChairSVG(cW, cH, rotation, left, top, isOccupied = false) {
             const ns = 'http://www.w3.org/2000/svg';
             const svg = document.createElementNS(ns, 'svg');
             svg.setAttribute('width', cW);
@@ -1662,10 +1672,10 @@
 
             const W = cW, H = cH;
             const legColor = '#5a3a1e', legStroke = '#3d2510';
-            const seatBase = '#4a2a12', seatStroke = '#2e1808';
-            const cushionMain = '#6b3d1f', cushionDark = '#4a2a12', cushionStroke = '#2e1808';
-            const backMain = '#3a2010', backArc = '#4a2a15', backStroke = '#1e0e04';
-            const stitchColor = 'rgba(120,80,40,0.55)', sheen = 'rgba(200,160,100,0.18)';
+            const seatBase = isOccupied ? '#5c1414' : '#4a2a12', seatStroke = isOccupied ? '#3d0c0c' : '#2e1808';
+            const cushionMain = isOccupied ? '#b91c1c' : '#6b3d1f', cushionDark = isOccupied ? '#7f1d1d' : '#4a2a12', cushionStroke = isOccupied ? '#450a0a' : '#2e1808';
+            const backMain = isOccupied ? '#7f1d1d' : '#3a2010', backStroke = isOccupied ? '#450a0a' : '#1e0e04';
+            const stitchColor = isOccupied ? 'rgba(255,100,100,0.4)' : 'rgba(120,80,40,0.55)';
 
             function el(tag, attrs) {
                 const e = document.createElementNS(ns, tag);
@@ -1723,29 +1733,7 @@
             body.style.height = H + 'px';
             body.onclick = () => clickMesa(mesa.id);
 
-            // Grade de churrasqueira
-            const grillW = W * 0.45, grillH = H * 0.50;
-            const grillSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            grillSvg.setAttribute('width', grillW); grillSvg.setAttribute('height', grillH);
-            grillSvg.style.position = 'absolute'; grillSvg.style.left = ((W - grillW) / 2) + 'px';
-            grillSvg.style.top = '18px'; grillSvg.style.zIndex = '3';
-            
-            const gNs = 'http://www.w3.org/2000/svg';
-            const gRect = document.createElementNS(gNs, 'rect');
-            gRect.setAttribute('width', grillW); gRect.setAttribute('height', grillH);
-            gRect.setAttribute('rx', '2'); gRect.setAttribute('fill', '#1a1210');
-            grillSvg.appendChild(gRect);
-            
-            // Barras da grade
-            for (let i = 1; i <= 4; i++) {
-                const line = document.createElementNS(gNs, 'line');
-                const by = (grillH / 5) * i;
-                line.setAttribute('x1', '2'); line.setAttribute('y1', by);
-                line.setAttribute('x2', grillW - 2); line.setAttribute('y2', by);
-                line.setAttribute('stroke', '#555'); line.setAttribute('stroke-width', '1');
-                grillSvg.appendChild(line);
-            }
-            body.appendChild(grillSvg);
+
 
             const lbl = document.createElement('div');
             lbl.className = 'table-label';
@@ -1753,23 +1741,34 @@
             body.appendChild(lbl);
 
             const pax = document.createElement('div');
-            pax.className = 'table-pax';
-            pax.textContent = res ? `${res.nome.split(' ')[0]} (${res.total_pessoas})` : `(${mesa.capacidade})`;
+            if (res) {
+                pax.className = 'table-pax';
+                pax.textContent = `${res.nome.split(' ')[0]} (${res.total_pessoas})`;
+            } else {
+                pax.className = 'table-cap';
+                pax.textContent = `(${mesa.capacidade})`;
+            }
             body.appendChild(pax);
 
             group.appendChild(body);
 
             // Cadeiras
             const ox = padX, oy = cH + gap;
+            let occupiedSeats = res && reserva_existe(res.status) ? res.total_pessoas : 0;
+            
             for (let i = 0; i < topCount; i++) {
                 const totalW = topCount * cW + (topCount - 1) * chairGap;
                 const cx = ox + (W - totalW) / 2 + i * (cW + chairGap);
-                group.appendChild(makeChairSVG(cW, cH, 0, cx, oy - cH - gap));
+                const occupied = occupiedSeats > 0;
+                if (occupied) occupiedSeats--;
+                group.appendChild(makeChairSVG(cW, cH, 0, cx, oy - cH - gap, occupied));
             }
             for (let i = 0; i < botCount; i++) {
                 const totalW = botCount * cW + (botCount - 1) * chairGap;
                 const cx = ox + (W - totalW) / 2 + i * (cW + chairGap);
-                group.appendChild(makeChairSVG(cW, cH, 180, cx, oy + H + gap));
+                const occupied = occupiedSeats > 0;
+                if (occupied) occupiedSeats--;
+                group.appendChild(makeChairSVG(cW, cH, 180, cx, oy + H + gap, occupied));
             }
 
             container.appendChild(group);
@@ -1961,13 +1960,29 @@
             // Validar horário de funcionamento
             const dia = new Date(data + 'T12:00:00').getDay();
             const hc = STATE.horarios.find(h => h.dia_semana === dia);
-            if (!hc || !hc.ativo) { toast('Restaurante fechado neste dia', 'error'); return; }
-            if (horario < hc.abertura || horario > hc.fechamento) { toast(`Fora do horário: ${hc.abertura}–${hc.fechamento}`, 'error'); return; }
+            if (!hc) { toast('Configuração de horário não encontrada', 'error'); return; }
+            
+            const noTurno1 = hc.ativo && horario >= hc.abertura?.substring(0,5) && horario <= hc.fechamento?.substring(0,5);
+            const noTurno2 = (dia === 6 ? hc.ativo_2 : false) && hc.abertura_2 && hc.fechamento_2 && horario >= hc.abertura_2.substring(0,5) && horario <= hc.fechamento_2.substring(0,5);
+            
+            if (!noTurno1 && !noTurno2) {
+                if (!hc.ativo && (!hc.ativo_2 || dia !== 6)) {
+                    toast('Restaurante fechado neste dia', 'error'); return;
+                }
+                const msg = (dia === 6 && hc.abertura_2) ? `Fora do horário: ${hc.ativo ? hc.abertura?.substring(0,5)+'–'+hc.fechamento?.substring(0,5) : ''} ${hc.ativo && hc.ativo_2 ? 'ou' : ''} ${hc.ativo_2 ? hc.abertura_2.substring(0,5)+'–'+hc.fechamento_2.substring(0,5) : ''}` : `Fora do horário: ${hc.abertura?.substring(0,5)}–${hc.fechamento?.substring(0,5)}`;
+                toast(msg.trim(), 'error'); return;
+            }
             // Validar horário máximo de reserva
-            if (hc.horario_max_reserva && horario > hc.horario_max_reserva) { toast(`Último horário para reserva: ${hc.horario_max_reserva}`, 'warn'); return; }
+            if (hc.horario_max_reserva && horario > hc.horario_max_reserva.substring(0,5)) { toast(`Último horário para reserva: ${hc.horario_max_reserva.substring(0,5)}`, 'warn'); return; }
 
             let mesa;
-            if (mesaId) mesa = STATE.mesas.find(m => m.id === mesaId);
+            if (mesaId) {
+                mesa = STATE.mesas.find(m => m.id === mesaId);
+                const mesaIdeal = alocarMesaAuto(total, data);
+                if (mesaIdeal && mesa.capacidade > mesaIdeal.capacidade) {
+                    toast('Existe uma mesa mais adequada disponível. Use a alocação automática.', 'error'); return;
+                }
+            }
             else { mesa = alocarMesaAuto(total, data); if (!mesa) { toast('Sem mesas disponíveis para ' + total + ' pessoas', 'error'); return; } }
 
             const cadeiras_extras = Math.max(0, total - mesa.capacidade);
@@ -1986,9 +2001,17 @@
         function alocarMesaAuto(total, data) {
             const ocup = new Set(STATE.reservas.filter(r => r.data_reserva === data && ['confirmada', 'aguardando', 'ocupada'].includes(r.status)).map(r => r.mesa_id));
             const livres = STATE.mesas.filter(m => m.ativa && !m.em_manutencao && !ocup.has(m.id));
-            const pref = total <= 4 ? [4, 6, 8] : total <= 6 ? [6, 8, 4] : [8, 6, 4];
-            for (const c of pref) { const m = livres.find(x => x.capacidade === c); if (m) return m; }
-            return livres[0] || null;
+
+            let prioridades;
+            if (total <= 4) prioridades = [4, 6, 8];
+            else if (total <= 6) prioridades = [6, 8];
+            else prioridades = [8];
+
+            for (const cap of prioridades) {
+                const mesa = livres.find(x => x.capacidade === cap);
+                if (mesa) return mesa;
+            }
+            return null;
         }
 
         // ─── DETALHE ───
@@ -2075,12 +2098,13 @@
             const map = {};
             STATE.horarios.forEach(h => { map[h.dia_semana] = h; });
             const tbody = document.getElementById('horarios-tbody');
-            tbody.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(dia => {
+            let html = '';
+            [0, 1, 2, 3, 4, 5].forEach(dia => {
                 const h = map[dia] || {
                     dia_semana: dia, abertura: '12:00', fechamento: '23:00', ativo: false,
                     horario_max_reserva: '22:00', horario_limite_espera: '22:30', antecedencia_min_min: 60
                 };
-                return `<tr>
+                html += `<tr>
       <td style="font-weight:700;font-family:var(--font-title)">${DIAS[dia]}</td>
       <td><label class="toggle"><input type="checkbox" id="h-ativo-${dia}" ${h.ativo ? 'checked' : ''}><span class="toggle-slider"></span></label></td>
       <td><input type="time" id="h-ab-${dia}" value="${h.abertura || '12:00'}"></td>
@@ -2089,27 +2113,67 @@
       <td><input type="time" id="h-limespera-${dia}" value="${h.horario_limite_espera || '22:30'}" title="Limite de espera da reserva"></td>
       <td><input type="number" id="h-antec-${dia}" value="${h.antecedencia_min_min ?? 60}" min="0" max="1440" title="Antecedência mínima em minutos"></td>
     </tr>`;
-            }).join('');
+            });
+            // Sábado — Duas linhas totalmente independentes
+            const sab = map[6] || {
+                dia_semana: 6, abertura: '12:00', fechamento: '15:00', ativo: false,
+                horario_max_reserva: '22:00', horario_limite_espera: '22:30', antecedencia_min_min: 60,
+                abertura_2: '18:30', fechamento_2: '23:00', ativo_2: false
+            };
+            html += `<tr style="border-top:2px solid var(--primary)">
+      <td style="font-weight:700;font-family:var(--font-title)">Sáb <span style="font-size:.65rem;color:var(--primary);display:block;font-weight:600">☀ Almoço</span></td>
+      <td><label class="toggle"><input type="checkbox" id="h-ativo-6" ${sab.ativo ? 'checked' : ''}><span class="toggle-slider"></span></label></td>
+      <td><input type="time" id="h-ab-6" value="${sab.abertura || '12:00'}"></td>
+      <td><input type="time" id="h-fe-6" value="${sab.fechamento || '15:00'}"></td>
+      <td style="color:var(--text3);font-size:.7rem;text-align:center">—</td>
+      <td style="color:var(--text3);font-size:.7rem;text-align:center">—</td>
+      <td style="color:var(--text3);font-size:.7rem;text-align:center">—</td>
+    </tr>
+    <tr style="background:rgba(87, 42, 251, 0.03)">
+      <td style="font-weight:700;font-family:var(--font-title)">Sáb <span style="font-size:.65rem;color:var(--accent);display:block;font-weight:600">🌙 Jantar</span></td>
+      <td><label class="toggle"><input type="checkbox" id="h-ativo2-6" ${sab.ativo_2 ? 'checked' : ''}><span class="toggle-slider"></span></label></td>
+      <td><input type="time" id="h-ab2-6" value="${sab.abertura_2 || '18:30'}"></td>
+      <td><input type="time" id="h-fe2-6" value="${sab.fechamento_2 || '23:00'}"></td>
+      <td><input type="time" id="h-maxres-6" value="${sab.horario_max_reserva || '22:00'}" title="Último horário aceito para reserva"></td>
+      <td><input type="time" id="h-limespera-6" value="${sab.horario_limite_espera || '22:30'}" title="Limite de espera da reserva"></td>
+      <td><input type="number" id="h-antec-6" value="${sab.antecedencia_min_min ?? 60}" min="0" max="1440" title="Antecedência mínima em minutos"></td>
+    </tr>`;
+            tbody.innerHTML = html;
         }
 
         async function salvarHorarios() {
+            let erros = 0;
+            function fmtTime(v) { return v && v.length === 5 ? v + ':00' : v; }
             for (let dia = 0; dia <= 6; dia++) {
-                const abertura = document.getElementById(`h-ab-${dia}`)?.value;
-                const fechamento = document.getElementById(`h-fe-${dia}`)?.value;
-                const ativo = document.getElementById(`h-ativo-${dia}`)?.checked;
-                const horario_max_reserva = document.getElementById(`h-maxres-${dia}`)?.value || null;
-                const horario_limite_espera = document.getElementById(`h-limespera-${dia}`)?.value || null;
+                const abVal = document.getElementById(`h-ab-${dia}`)?.value;
+                const feVal = document.getElementById(`h-fe-${dia}`)?.value;
+                const ativo = document.getElementById(`h-ativo-${dia}`)?.checked ?? false;
+                const mrVal = document.getElementById(`h-maxres-${dia}`)?.value;
+                const leVal = document.getElementById(`h-limespera-${dia}`)?.value;
                 const antecedencia_min_min = parseInt(document.getElementById(`h-antec-${dia}`)?.value) || 60;
-                if (!abertura || !fechamento) continue;
+                if (!abVal || !feVal) continue;
+                const abertura = fmtTime(abVal);
+                const fechamento = fmtTime(feVal);
+                const horario_max_reserva = mrVal ? fmtTime(mrVal) : null;
+                const horario_limite_espera = leVal ? fmtTime(leVal) : null;
                 const payload = { abertura, fechamento, ativo, horario_max_reserva, horario_limite_espera, antecedencia_min_min };
+                if (dia === 6) {
+                    const ab2Val = document.getElementById(`h-ab2-${dia}`)?.value;
+                    const fe2Val = document.getElementById(`h-fe2-${dia}`)?.value;
+                    const ativo2 = document.getElementById(`h-ativo2-${dia}`)?.checked ?? false;
+                    payload.abertura_2 = ab2Val ? fmtTime(ab2Val) : null;
+                    payload.fechamento_2 = fe2Val ? fmtTime(fe2Val) : null;
+                    payload.ativo_2 = ativo2;
+                }
                 const ex = STATE.horarios.find(h => h.dia_semana === dia);
                 try {
                     if (ex) await sbPatch('restaurant_horarios', `id=eq.${ex.id}`, payload);
                     else await sbPost('restaurant_horarios', { restaurante_id: RESTAURANTE_ID, dia_semana: dia, ...payload });
-                } catch (e) { console.error(e); }
+                } catch (e) { console.error('Erro ao salvar dia', dia, e); erros++; }
             }
             await carregarHorarios();
-            toast('Horários salvos ✓', 'success');
+            if (erros > 0) toast(`Erro ao salvar ${erros} dia(s). Verifique o console.`, 'error');
+            else toast('Horários salvos ✓', 'success');
         }
 
         // ─── CONFIG: MESAS ───
