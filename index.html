@@ -1419,7 +1419,6 @@
                                     <th>Fechamento</th>
                                     <th title="Último horário aceito para novas reservas">Máx. Reserva</th>
                                     <th title="Até quando aguardar cliente sem reserva cancelar">Limite Espera</th>
-                                    <th title="Antecedência mínima em minutos">Antec. (min)</th>
                                 </tr>
                             </thead>
                             <tbody id="horarios-tbody">
@@ -1435,14 +1434,18 @@
                     </div>
                     <div style="margin-top:14px;display:flex;gap:10px;align-items:center">
                         <button class="btn btn-primary" onclick="salvarHorarios()">Salvar Horários</button>
-                        <span style="font-size:.72rem;color:var(--text3)">💡 Antec. menor = mais flexível (ex: FDS =
-                            30min)</span>
                     </div>
                 </div>
 
                 <!-- Controle de Mesas -->
                 <div class="config-card">
-                    <div class="config-card-title"><span class="icon">🪑</span> Controle de Mesas</div>
+                    <div class="config-card-title" style="justify-content:space-between">
+                        <div style="display:flex;align-items:center;gap:8px"><span class="icon">🪑</span> Controle de Mesas</div>
+                        <div class="search-box" style="max-width:150px; padding:4px 8px">
+                            <span>🔍</span>
+                            <input type="text" id="search-mesas" placeholder="Mesa..." oninput="renderMesasConfig()">
+                        </div>
+                    </div>
                     <div class="mesas-config-grid" id="mesas-config-grid">
                         <div class="loading">
                             <div class="spinner"></div> Carregando...
@@ -1552,9 +1555,9 @@
                 <button class="modal-close" onclick="fecharModal('modal-detalhe')">✕</button>
             </div>
             <div class="modal-body" id="modal-detalhe-body"></div>
-            <div class="modal-footer">
+            <div class="modal-footer" id="modal-detalhe-footer">
                 <button class="btn btn-ghost" onclick="fecharModal('modal-detalhe')">Fechar</button>
-                <button class="btn btn-accent btn-sm" onclick="marcarStatus('ocupada')">✔ Sentar</button>
+                <button class="btn btn-accent btn-sm" onclick="marcarStatus('ocupada')">✔ Confirmar Chegada</button>
                 <button class="btn btn-danger" onclick="cancelarReservaAtual()">✕ Cancelar</button>
             </div>
         </div>
@@ -1934,11 +1937,13 @@
             const data = document.getElementById('res-data').value || document.getElementById('data-selecionada').value;
             const ocup = new Set(STATE.reservas.filter(r => r.data_reserva === data && ['confirmada', 'aguardando', 'ocupada'].includes(r.status)).map(r => r.mesa_id));
             s.innerHTML = '<option value="">🤖 Automática</option>';
-            STATE.mesas.filter(m => m.ativa && !m.em_manutencao).forEach(m => {
+            STATE.mesas.filter(m => m.ativa).forEach(m => {
                 const o = document.createElement('option');
                 o.value = m.id; const livre = !ocup.has(m.id);
-                o.textContent = `Mesa ${m.numero} — ${m.capacidade}p (${m.setor}) ${livre ? '✓ Livre' : '✗ Reservada'}`;
-                if (!livre) o.style.color = 'var(--danger)';
+                const statusExtra = m.em_manutencao ? ' 🛠 MANUTENÇÃO' : (livre ? ' ✓ Livre' : ' ✗ Reservada');
+                o.textContent = `Mesa ${m.numero} — ${m.capacidade}p (${m.setor})${statusExtra}`;
+                if (!livre || m.em_manutencao) o.style.color = 'var(--danger)';
+                if (m.em_manutencao) o.disabled = true;
                 if (m.id === sel) o.selected = true;
                 s.appendChild(o);
             });
@@ -1978,12 +1983,18 @@
             let mesa;
             if (mesaId) {
                 mesa = STATE.mesas.find(m => m.id === mesaId);
-                const mesaIdeal = alocarMesaAuto(total, data);
-                if (mesaIdeal && mesa.capacidade > mesaIdeal.capacidade) {
-                    toast('Existe uma mesa mais adequada disponível. Use a alocação automática.', 'error'); return;
+                if (mesa && mesa.em_manutencao) {
+                    toast(`Mesa ${mesa.numero} está em MANUTENÇÃO e não pode ser reservada.`, 'error');
+                    return;
                 }
+                if (mesa && total > mesa.capacidade) {
+                    toast(`Capacidade insuficiente! Mesa ${mesa.numero} suporta apenas ${mesa.capacidade} pessoas.`, 'error');
+                    return;
+                }
+            } else {
+                mesa = alocarMesaAuto(total, data);
             }
-            else { mesa = alocarMesaAuto(total, data); if (!mesa) { toast('Sem mesas disponíveis para ' + total + ' pessoas', 'error'); return; } }
+            if (!mesa) { toast('Nenhuma mesa disponível para este grupo/horário', 'error'); return; }
 
             const cadeiras_extras = Math.max(0, total - mesa.capacidade);
             const payload = {
@@ -2053,6 +2064,16 @@
         <button class="btn btn-ghost btn-sm" onclick="marcarStatusDireto('${r.id}','no_show')">👻 No-show</button>
       </div>
     </div>`;
+            // Lógica dinâmica para o footer
+            const footer = document.getElementById('modal-detalhe-footer');
+            if (footer) {
+                footer.innerHTML = `
+                    <button class="btn btn-ghost" onclick="fecharModal('modal-detalhe')">Fechar</button>
+                    ${r.status !== 'ocupada' ? `<button class="btn btn-accent btn-sm" onclick="marcarStatus('ocupada')">✔ Confirmar Chegada</button>` : ''}
+                    <button class="btn btn-danger" onclick="cancelarReservaAtual()">✕ Cancelar</button>
+                `;
+            }
+
             abrirModal('modal-detalhe');
         }
 
@@ -2111,7 +2132,6 @@
       <td><input type="time" id="h-fe-${dia}" value="${h.fechamento || '23:00'}"></td>
       <td><input type="time" id="h-maxres-${dia}" value="${h.horario_max_reserva || '22:00'}" title="Último horário aceito para reserva"></td>
       <td><input type="time" id="h-limespera-${dia}" value="${h.horario_limite_espera || '22:30'}" title="Limite de espera da reserva"></td>
-      <td><input type="number" id="h-antec-${dia}" value="${h.antecedencia_min_min ?? 60}" min="0" max="1440" title="Antecedência mínima em minutos"></td>
     </tr>`;
             });
             // Sábado — Duas linhas totalmente independentes
@@ -2120,7 +2140,7 @@
                 horario_max_reserva: '22:00', horario_limite_espera: '22:30', antecedencia_min_min: 60,
                 abertura_2: '18:30', fechamento_2: '23:00', ativo_2: false
             };
-            html += `<tr style="border-top:2px solid var(--primary)">
+            html += `<tr>
       <td style="font-weight:700;font-family:var(--font-title)">Sáb <span style="font-size:.65rem;color:var(--primary);display:block;font-weight:600">☀ Almoço</span></td>
       <td><label class="toggle"><input type="checkbox" id="h-ativo-6" ${sab.ativo ? 'checked' : ''}><span class="toggle-slider"></span></label></td>
       <td><input type="time" id="h-ab-6" value="${sab.abertura || '12:00'}"></td>
@@ -2136,7 +2156,6 @@
       <td><input type="time" id="h-fe2-6" value="${sab.fechamento_2 || '23:00'}"></td>
       <td><input type="time" id="h-maxres-6" value="${sab.horario_max_reserva || '22:00'}" title="Último horário aceito para reserva"></td>
       <td><input type="time" id="h-limespera-6" value="${sab.horario_limite_espera || '22:30'}" title="Limite de espera da reserva"></td>
-      <td><input type="number" id="h-antec-6" value="${sab.antecedencia_min_min ?? 60}" min="0" max="1440" title="Antecedência mínima em minutos"></td>
     </tr>`;
             tbody.innerHTML = html;
         }
@@ -2150,13 +2169,12 @@
                 const ativo = document.getElementById(`h-ativo-${dia}`)?.checked ?? false;
                 const mrVal = document.getElementById(`h-maxres-${dia}`)?.value;
                 const leVal = document.getElementById(`h-limespera-${dia}`)?.value;
-                const antecedencia_min_min = parseInt(document.getElementById(`h-antec-${dia}`)?.value) || 60;
                 if (!abVal || !feVal) continue;
                 const abertura = fmtTime(abVal);
                 const fechamento = fmtTime(feVal);
                 const horario_max_reserva = mrVal ? fmtTime(mrVal) : null;
                 const horario_limite_espera = leVal ? fmtTime(leVal) : null;
-                const payload = { abertura, fechamento, ativo, horario_max_reserva, horario_limite_espera, antecedencia_min_min };
+                const payload = { abertura, fechamento, ativo, horario_max_reserva, horario_limite_espera };
                 if (dia === 6) {
                     const ab2Val = document.getElementById(`h-ab2-${dia}`)?.value;
                     const fe2Val = document.getElementById(`h-fe2-${dia}`)?.value;
@@ -2179,20 +2197,44 @@
         // ─── CONFIG: MESAS ───
         function renderMesasConfig() {
             const grid = document.getElementById('mesas-config-grid');
-            grid.innerHTML = STATE.mesas.map(m => `
-    <div class="mesa-config-row">
+            const data = document.getElementById('data-selecionada').value;
+            const search = document.getElementById('search-mesas')?.value.toLowerCase() || '';
+            const ocupadas = new Set(STATE.reservas.filter(r => r.data_reserva === data && ['confirmada', 'aguardando', 'ocupada'].includes(r.status)).map(r => r.mesa_id));
+
+            const mesasFiltradas = STATE.mesas.filter(m => m.numero.toString().includes(search));
+
+            if (mesasFiltradas.length === 0) {
+                grid.innerHTML = '<div class="empty">Nenhuma mesa encontrada</div>';
+                return;
+            }
+
+            grid.innerHTML = mesasFiltradas.map(m => {
+                const estaReservada = ocupadas.has(m.id);
+                const isDisponivel = m.ativa && !estaReservada;
+                
+                return `
+    <div class="mesa-config-row" style="${m.em_manutencao ? 'background:var(--surf3)' : ''}">
       <span class="mesa-config-num">${m.numero}</span>
       <div><div style="font-size:.78rem;font-weight:600">${m.capacidade}p · ${m.setor}</div></div>
-      <div style="text-align:center"><div style="font-size:.65rem;color:var(--text3);margin-bottom:2px">Ativa</div>
-        <label class="toggle"><input type="checkbox" ${m.ativa ? 'checked' : ''} onchange="toggleMesa('${m.id}','ativa',this.checked)"><span class="toggle-slider"></span></label>
+      <div style="text-align:center">
+        <div style="font-size:.65rem;color:var(--text);font-weight:700;margin-bottom:2px">${estaReservada ? 'Ocupada' : 'Disponível'}</div>
+        <label class="toggle">
+          <input type="checkbox" onchange="toggleMesa('${m.id}','ativa',this.checked)" ${isDisponivel ? 'checked' : ''} ${estaReservada ? 'disabled' : ''}>
+          <span class="toggle-slider"></span>
+        </label>
       </div>
-      <div style="text-align:center"><div style="font-size:.65rem;color:var(--text3);margin-bottom:2px">Manutenção</div>
-        <label class="toggle"><input type="checkbox" ${m.em_manutencao ? 'checked' : ''} onchange="toggleMesa('${m.id}','em_manutencao',this.checked)"><span class="toggle-slider"></span></label>
+      <div style="text-align:center">
+        <div style="font-size:.65rem;color:var(--text);font-weight:700;margin-bottom:2px">Manutenção</div>
+        <label class="toggle">
+          <input type="checkbox" onchange="toggleMesa('${m.id}','em_manutencao',this.checked)" ${m.em_manutencao ? 'checked' : ''}>
+          <span class="toggle-slider"></span>
+        </label>
       </div>
       <div><select style="font-size:.68rem;border:1px solid var(--border);border-radius:4px;padding:3px;background:var(--surf2)" onchange="atualizarSetor('${m.id}',this.value)">
         ${['CAIXA', 'CENTRO', 'JANELA'].map(s => `<option ${m.setor === s ? 'selected' : ''}>${s}</option>`).join('')}
       </select></div>
-    </div>`).join('');
+    </div>`;
+            }).join('');
         }
 
         async function toggleMesa(id, campo, valor) {
