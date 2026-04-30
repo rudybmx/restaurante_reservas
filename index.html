@@ -1835,7 +1835,7 @@
 
             // ZONA INFERIOR
             (function () {
-                const botY = 558, padX = 18, gapX = 13; let cursor = 8;
+                const botY = 558, padX = 8, gapX = 8; let cursor = 8;
                 ['9', '8', '7', '6', '5', '4', '3', '2', '1'].forEach(num => {
                     const m = STATE.mesas.find(x => String(x.numero) === num);
                     if (m) buildTable(m, reservaMap[m.id], 't6', 4, 3, cursor, botY, padX);
