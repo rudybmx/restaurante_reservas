@@ -624,8 +624,8 @@
         }
 
         .t4 { width: 70px; height: 50px; }
-        .t6 { width: 90px; height: 58px; }
-        .t8 { width: 130px; height: 58px; }
+        .t6 { width: 115px; height: 58px; }
+        .t8 { width: 155px; height: 58px; }
 
 
         /* ─── LISTA ─── */
@@ -1651,6 +1651,12 @@
             const total = STATE.mesas.filter(m => m.ativa).length;
             const ocup = total ? Math.round((mesasUsadas / total) * 100) : 0;
             const noshow = STATE.reservas.filter(x => x.status === 'no_show').length;
+            
+            // Cálculo de cadeiras extras
+            const usedExtras = ativas.reduce((s, x) => s + (x.cadeiras_extras || 0), 0);
+            const pool = STATE.config?.cadeiras_sobressalentes || 0;
+            document.getElementById('cadeiras-count').textContent = `${pool - usedExtras} / ${pool}`;
+
             document.getElementById('stat-reservas').textContent = ativas.length;
             document.getElementById('stat-pessoas').textContent = pessoas;
             document.getElementById('stat-livres').textContent = livres;
@@ -1796,8 +1802,8 @@
             (function () {
                 const topY = 88, gapX = 37; let cursor = 10;
                 const m25 = STATE.mesas.find(m => String(m.numero) === '25');
-                if (m25) buildTable(m25, reservaMap[m25.id], 't8', 4, 4, cursor, topY);
-                cursor += 130 + 60 + gapX;
+                if (m25) buildTable(m25, reservaMap[m25.id], 't8', 5, 5, cursor, topY);
+                cursor += 155 + 60 + gapX;
 
                 ['24', '23', '22', '21', '20', '19'].forEach(num => {
                     const m = STATE.mesas.find(x => String(x.numero) === num);
@@ -1810,12 +1816,12 @@
             (function () {
                 const midY = 298, gapX = 27; let cursor = 10;
                 const m18 = STATE.mesas.find(m => String(m.numero) === '18');
-                if (m18) buildTable(m18, reservaMap[m18.id], 't6', 3, 3, cursor, midY);
-                cursor += 90 + 60 + gapX;
+                if (m18) buildTable(m18, reservaMap[m18.id], 't6', 4, 3, cursor, midY);
+                cursor += 115 + 60 + gapX;
 
                 const m16 = STATE.mesas.find(m => String(m.numero) === '16');
-                if (m16) buildTable(m16, reservaMap[m16.id], 't8', 4, 4, cursor, midY);
-                cursor += 130 + 60 + gapX;
+                if (m16) buildTable(m16, reservaMap[m16.id], 't8', 5, 5, cursor, midY);
+                cursor += 155 + 60 + gapX;
 
                 ['15', '14', '13', '12'].forEach(num => {
                     const m = STATE.mesas.find(x => String(x.numero) === num);
@@ -1824,7 +1830,7 @@
                 });
 
                 const m10 = STATE.mesas.find(m => String(m.numero) === '10');
-                if (m10) buildTable(m10, reservaMap[m10.id], 't8', 4, 4, cursor, midY);
+                if (m10) buildTable(m10, reservaMap[m10.id], 't8', 5, 5, cursor, midY);
             })();
 
             // ZONA INFERIOR
@@ -1832,8 +1838,8 @@
                 const botY = 558, padX = 18, gapX = 13; let cursor = 8;
                 ['9', '8', '7', '6', '5', '4', '3', '2', '1'].forEach(num => {
                     const m = STATE.mesas.find(x => String(x.numero) === num);
-                    if (m) buildTable(m, reservaMap[m.id], 't6', 3, 3, cursor, botY, padX);
-                    cursor += (90 + padX * 2) + gapX;
+                    if (m) buildTable(m, reservaMap[m.id], 't6', 4, 3, cursor, botY, padX);
+                    cursor += (115 + padX * 2) + gapX;
                 });
             })();
         }
@@ -1941,7 +1947,13 @@
                 const o = document.createElement('option');
                 o.value = m.id; const livre = !ocup.has(m.id);
                 const statusExtra = m.em_manutencao ? ' 🛠 MANUTENÇÃO' : (livre ? ' ✓ Livre' : ' ✗ Reservada');
-                o.textContent = `Mesa ${m.numero} — ${m.capacidade}p (${m.setor})${statusExtra}`;
+                
+                // Mostrar capacidade estendida
+                let capExt = '';
+                if (m.capacidade === 8) capExt = ' (+2)';
+                else if (m.capacidade === 6) capExt = ' (+1)';
+                
+                o.textContent = `Mesa ${m.numero} — ${m.capacidade}p${capExt} (${m.setor})${statusExtra}`;
                 if (!livre || m.em_manutencao) o.style.color = 'var(--danger)';
                 if (m.em_manutencao) o.disabled = true;
                 if (m.id === sel) o.selected = true;
@@ -1987,8 +1999,17 @@
                     toast(`Mesa ${mesa.numero} está em MANUTENÇÃO e não pode ser reservada.`, 'error');
                     return;
                 }
-                if (mesa && total > mesa.capacidade) {
-                    toast(`Capacidade insuficiente! Mesa ${mesa.numero} suporta apenas ${mesa.capacidade} pessoas.`, 'error');
+                
+                // Regra de Ocupação Mínima (Metade da capacidade)
+                const minPessoas = Math.ceil(mesa.capacidade / 2);
+                if (mesa && total < minPessoas) {
+                    toast(`Ocupação mínima insuficiente! Mesa ${mesa.numero} exige no mínimo ${minPessoas} pessoas.`, 'error');
+                    return;
+                }
+
+                const capMax = mesa.capacidade + (mesa.capacidade === 8 ? 2 : (mesa.capacidade === 6 ? 1 : 0));
+                if (mesa && total > capMax) {
+                    toast(`Capacidade insuficiente! Mesa ${mesa.numero} suporta até ${capMax} pessoas com cadeiras extras.`, 'error');
                     return;
                 }
             } else {
@@ -2011,12 +2032,15 @@
 
         function alocarMesaAuto(total, data) {
             const ocup = new Set(STATE.reservas.filter(r => r.data_reserva === data && ['confirmada', 'aguardando', 'ocupada'].includes(r.status)).map(r => r.mesa_id));
-            const livres = STATE.mesas.filter(m => m.ativa && !m.em_manutencao && !ocup.has(m.id));
+            
+            // Filtra mesas ativas, sem manutenção, não ocupadas e que respeitem a ocupação mínima (total >= cap/2)
+            const livres = STATE.mesas.filter(m => m.ativa && !m.em_manutencao && !ocup.has(m.id) && total >= Math.ceil(m.capacidade / 2));
 
             let prioridades;
             if (total <= 4) prioridades = [4, 6, 8];
-            else if (total <= 6) prioridades = [6, 8];
-            else prioridades = [8];
+            else if (total <= 7) prioridades = [6, 8];
+            else if (total <= 10) prioridades = [8];
+            else return null;
 
             for (const cap of prioridades) {
                 const mesa = livres.find(x => x.capacidade === cap);
