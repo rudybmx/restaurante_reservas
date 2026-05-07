@@ -177,6 +177,28 @@
             }
         }
 
+        .input-obs-lista {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text2);
+            font-size: .78rem;
+            width: 100%;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .input-obs-lista:hover {
+            border-color: var(--border);
+            background: var(--surf1);
+        }
+        .input-obs-lista:focus {
+            border-color: var(--primary);
+            background: var(--surf2);
+            color: var(--text);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
         /* NAV TABS */
         .nav-tabs {
             display: flex;
@@ -341,6 +363,55 @@
             background: var(--accent);
             color: #fff
         }
+
+        /* TURNO SELECTOR */
+        .turno-selector {
+            display: flex;
+            background: var(--surf2);
+            padding: 4px;
+            border-radius: 99px;
+            gap: 4px;
+            border: 1px solid var(--border);
+            margin-right: 12px;
+        }
+
+        .turno-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border: none;
+            background: none;
+            border-radius: 99px;
+            font-family: var(--font-body);
+            font-size: .80rem;
+            font-weight: 600;
+            color: var(--text3);
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .turno-btn.active {
+            background: var(--surface);
+            color: var(--text);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .turno-btn:hover:not(.active) {
+            background: rgba(0,0,0,0.04);
+            color: var(--text2);
+        }
+
+        .badge-turno {
+            font-size: .65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-almoco { background: var(--warn-bg); color: var(--warn); }
+        .badge-jantar { background: var(--a10); color: var(--accent); }
 
         /* STATS */
         .stats-row {
@@ -575,9 +646,10 @@
         }
 
         /* Cores de Status para Mesas */
-        .table-body.status-livre { border-color: #16a34a; box-shadow: 0 0 25px rgba(22, 163, 74, 0.6); background: linear-gradient(145deg, #224c2d, #14301a, #0d2111); }
-        .table-body.status-confirmada, .table-body.status-aguardando, .table-body.status-reservada { border-color: #d97706; box-shadow: 0 0 25px rgba(217, 119, 6, 0.6); background: linear-gradient(145deg, #663806, #452402, #2b1600); }
-        .table-body.status-ocupada { border-color: #dc2626; box-shadow: 0 0 25px rgba(220, 38, 38, 0.6); background: linear-gradient(145deg, #5c1414, #3d0c0c, #260505); }
+        .table-body.status-livre { border-color: #16a34a; box-shadow: 0 0 15px rgba(22, 163, 74, 0.3); background: linear-gradient(145deg, #224c2d, #14301a, #0d2111); }
+        .table-body.status-confirmada { border-color: #22c55e; box-shadow: 0 0 25px rgba(34, 197, 94, 0.6); background: linear-gradient(145deg, #166534, #14532d, #064e3b); }
+        .table-body.status-ocupada { border-color: #eab308; box-shadow: 0 0 25px rgba(234, 179, 8, 0.6); background: linear-gradient(145deg, #854d0e, #713f12, #422006); }
+        .table-body.status-ordem_chegada { border-color: #3b82f6; box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); background: linear-gradient(145deg, #1e3a8a, #172554, #0f172a); }
         .table-body.status-manutencao { border-color: #94a3b8; opacity: 0.7; }
 
         .table-body::before {
@@ -615,6 +687,19 @@
             color: rgba(255, 255, 255, 0.5);
             margin-top: 2px;
             z-index: 4;
+        }
+
+        /* Ajustes para mesas menores (t4) */
+        .table-body.t4 .table-pax {
+            font-size: 11px;
+            letter-spacing: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 90%;
+        }
+        .table-body.t4 .table-label {
+            font-size: 14px;
         }
 
         .chair-svg {
@@ -752,19 +837,29 @@
         }
 
         .status-ocupada {
-            background: var(--danger-bg);
-            color: var(--danger)
+            background: var(--warn-bg);
+            color: var(--warn)
         }
 
-        .status-cancelada {
-            background: var(--surf3);
-            color: var(--text3);
-            text-decoration: line-through
+        .status-cancelada, .status-cancelado {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .status-atendido {
+            background: var(--ok-bg);
+            color: var(--ok);
         }
 
         .status-no_show {
             background: var(--a10);
             color: var(--accent)
+        }
+
+        .status-ordem_chegada {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            font-weight: 700;
         }
 
         .actions-cell {
@@ -987,6 +1082,10 @@
 
         .toggle input:checked+.toggle-slider {
             background: var(--secondary)
+        }
+
+        .toggle.toggle-danger input:checked+.toggle-slider {
+            background: var(--danger)
         }
 
         .toggle input:checked+.toggle-slider::before {
@@ -1272,6 +1371,9 @@
         <button class="tab-btn" onclick="switchTab('lista')" id="tab-lista">
             <span>📋</span> Lista de Reservas <span class="tab-count" id="count-lista">0</span>
         </button>
+        <button class="tab-btn" onclick="switchTab('espera')" id="tab-espera">
+            <span>⏳</span> Lista de Espera <span class="tab-count" id="count-espera">0</span>
+        </button>
         <button class="tab-btn" onclick="switchTab('config')" id="tab-config">
             <span>⚙️</span> Configurações
         </button>
@@ -1288,6 +1390,7 @@
             </div>
             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
                 <button class="btn btn-primary btn-sm" onclick="abrirModalNovaReserva()">+ Nova Reserva</button>
+                <button class="btn btn-accent btn-sm" onclick="abrirModalEspera()">+ Lista de Espera</button>
                 <button class="btn btn-ghost btn-sm" onclick="carregarDados()">🔄 Atualizar</button>
             </div>
         </div>
@@ -1325,6 +1428,16 @@
             <div class="salao-wrapper">
                 <div class="salao-header">
                     <h2>Planta do Salão</h2>
+
+                    <div class="turno-selector" id="shift-selector-container">
+                        <button class="turno-btn active" onclick="setTurno(1)" id="btn-turno-1">
+                            <span>☀️</span> Almoço
+                        </button>
+                        <button class="turno-btn" onclick="setTurno(2)" id="btn-turno-2">
+                            <span>🌙</span> Jantar
+                        </button>
+                    </div>
+
                     <div class="legend">
                         <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div> Livre</div>
                         <div class="legend-item"><div class="legend-dot" style="background:#d97706"></div> Reservada</div>
@@ -1366,6 +1479,7 @@
                     <option value="ocupada">Ocupada</option>
                     <option value="cancelada">Cancelada</option>
                     <option value="no_show">No-show</option>
+                    <option value="ordem_chegada">Ordem de Chegada</option>
                 </select>
                 <select class="filter-select" id="filter-cap" onchange="filtrarLista()">
                     <option value="">Todas as mesas</option>
@@ -1402,6 +1516,36 @@
             </div>
         </div>
 
+        <!-- VIEW ESPERA -->
+        <div class="view" id="view-espera">
+            <div class="list-controls">
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="search-espera" placeholder="Buscar na fila..." oninput="filtrarEspera()">
+                </div>
+                <div id="espera-stats-summary" style="margin-left:auto; display:flex; gap:12px;">
+                    <!-- Preenchido via JS -->
+                </div>
+            </div>
+            <div class="reservas-table-wrap">
+                <table class="reservas-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Pessoas</th>
+                            <th>Aguardando</th>
+                            <th>Observações</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-espera">
+                        <tr><td colspan="6"><div class="empty">Carregando lista...</div></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- VIEW CONFIG -->
         <div class="view" id="view-config">
             <div class="config-grid">
@@ -1419,6 +1563,7 @@
                                     <th>Fechamento</th>
                                     <th title="Último horário aceito para novas reservas">Máx. Reserva</th>
                                     <th title="Até quando aguardar cliente sem reserva cancelar">Limite Espera</th>
+                                    <th>Tolerância (min)</th>
                                 </tr>
                             </thead>
                             <tbody id="horarios-tbody">
@@ -1547,6 +1692,34 @@
         </div>
     </div>
 
+    <!-- MODAL: Lista de Espera -->
+    <div class="modal-backdrop" id="modal-espera">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>Adicionar à Espera</h3>
+                <button class="modal-close" onclick="fecharModal('modal-espera')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nome do Cliente</label>
+                    <input type="text" id="esp-nome" placeholder="Ex: João Silva">
+                </div>
+                <div class="form-group">
+                    <label>Quantidade de Pessoas</label>
+                    <input type="number" id="esp-pessoas" min="1" value="2">
+                </div>
+                <div class="form-group">
+                    <label>Observações</label>
+                    <textarea id="esp-obs" placeholder="Preferência por janela, etc..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" onclick="fecharModal('modal-espera')">Cancelar</button>
+                <button class="btn btn-primary" onclick="salvarEspera()">Adicionar à Fila</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL: Detalhe -->
     <div class="modal-backdrop" id="modal-detalhe">
         <div class="modal">
@@ -1573,7 +1746,17 @@
         const DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
         // ─── STATE ───
-        let STATE = { reservas: [], mesas: [], config: null, horarios: [], reservaAtual: null, filtrados: [] };
+        let STATE = { 
+            reservas: [], 
+            mesas: [], 
+            config: null, 
+            horarios: [], 
+            reservaAtual: null, 
+            filtrados: [], 
+            espera: [], 
+            esperaFiltrada: [],
+            turno_selecionado: 1 // 1: Almoço/Turno 1, 2: Jantar/Turno 2
+        };
 
         // ─── API ───
         async function sbFetch(path, opts = {}) {
@@ -1593,24 +1776,50 @@
 
         // ─── INIT ───
         window.addEventListener('DOMContentLoaded', async () => {
-            hojeData();
+            configurarDataInicial();
             atualizarClock();
             setInterval(atualizarClock, 1000);
             await carregarMesas();
             await carregarConfig();
             await carregarHorarios();
             await carregarDados();
-            setInterval(carregarDados, 60000);
+            await carregarEspera();
+            setInterval(() => { carregarDados(); carregarEspera(); }, 60000);
         });
 
+        function configurarDataInicial() {
+            document.getElementById('data-selecionada').value = obterDataHoje();
+        }
+
+        function obterDataHoje() {
+            const d = new Date();
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+        function setTurno(t) {
+            STATE.turno_selecionado = t;
+            document.getElementById('btn-turno-1').classList.toggle('active', t === 1);
+            document.getElementById('btn-turno-2').classList.toggle('active', t === 2);
+            renderStats();
+            renderMapa();
+            renderLista();
+        }
+
         function hojeData() {
-            document.getElementById('data-selecionada').value = new Date().toISOString().split('T')[0];
+            document.getElementById('data-selecionada').value = obterDataHoje();
+            carregarDados();
         }
-        function mudarData(d) {
-            const inp = document.getElementById('data-selecionada');
-            const dt = new Date(inp.value + 'T12:00:00'); dt.setDate(dt.getDate() + d);
-            inp.value = dt.toISOString().split('T')[0]; carregarDados();
+
+        function mudarData(offset) {
+            const input = document.getElementById('data-selecionada');
+            const data = new Date(input.value + 'T12:00:00');
+            data.setDate(data.getDate() + offset);
+            input.value = data.toISOString().split('T')[0];
+            carregarDados();
         }
+
         function atualizarClock() {
             document.getElementById('topbar-date').textContent =
                 new Date().toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -1632,25 +1841,62 @@
             renderHorarios();
         }
         async function carregarDados() {
-            const data = document.getElementById('data-selecionada').value;
-            if (!data) return;
+            const dataInput = document.getElementById('data-selecionada').value;
+            if (!dataInput) return;
+
+            // Determinar se deve mostrar o seletor de turno (Sábado ou dias com 2 turnos)
+            const diaSemana = new Date(dataInput + 'T12:00:00').getDay();
+            const configDia = STATE.horarios.find(h => h.dia_semana === diaSemana);
+            const selector = document.getElementById('shift-selector-container');
+            
+            if (selector) {
+                const temDoisTurnos = (diaSemana === 6) || (configDia && configDia.ativo && configDia.ativo_2);
+                selector.style.display = temDoisTurnos ? 'flex' : 'none';
+                if (!temDoisTurnos) STATE.turno_selecionado = 1;
+            }
+
             try {
                 STATE.reservas = await sbGet('restaurant_reservas',
-                    `restaurante_id=eq.${RESTAURANTE_ID}&data_reserva=eq.${data}&status=neq.cancelada&order=horario.asc`);
+                    `restaurante_id=eq.${RESTAURANTE_ID}&data_reserva=eq.${dataInput}&status=neq.cancelada&order=horario.asc`);
             } catch (e) { STATE.reservas = []; }
-            STATE.filtrados = [...STATE.reservas];
+            
+            await verificarAtrasos();
             renderStats(); renderMapa(); renderLista();
+            carregarEspera();
+        }
+
+        // Função auxiliar para filtrar reservas do turno atual
+        function getReservasTurno(lista = STATE.reservas) {
+            const dataInput = document.getElementById('data-selecionada').value;
+            const diaSemana = new Date(dataInput + 'T12:00:00').getDay();
+            const configDia = STATE.horarios.find(h => h.dia_semana === diaSemana);
+            
+            // Se não houver config ou o dia não tiver 2 turnos, retorna tudo (considerando Turno 1 como único)
+            const temDoisTurnos = (diaSemana === 6) || (configDia && configDia.ativo && configDia.ativo_2);
+            if (!temDoisTurnos) return lista;
+
+            return lista.filter(r => {
+                const h = r.horario.substring(0, 5);
+                if (STATE.turno_selecionado === 1) {
+                    const fim1 = configDia?.fechamento?.substring(0,5) || '16:00';
+                    return h <= fim1;
+                } else {
+                    const inicio2 = configDia?.abertura_2?.substring(0,5) || '17:00';
+                    return h >= inicio2;
+                }
+            });
         }
 
         // ─── STATS ───
         function renderStats() {
-            const ativas = STATE.reservas.filter(x => ['confirmada', 'aguardando', 'ocupada'].includes(x.status));
+            const reservasTurno = getReservasTurno();
+            const ativas = reservasTurno.filter(x => ['confirmada', 'aguardando', 'ocupada', 'ordem_chegada'].includes(x.status));
             const pessoas = ativas.reduce((s, x) => s + x.total_pessoas, 0);
             const mesasUsadas = new Set(ativas.map(x => x.mesa_id)).size;
             const livres = STATE.mesas.filter(m => m.ativa && !m.em_manutencao && !ativas.find(r => r.mesa_id === m.id)).length;
             const total = STATE.mesas.filter(m => m.ativa).length;
             const ocup = total ? Math.round((mesasUsadas / total) * 100) : 0;
-            const noshow = STATE.reservas.filter(x => x.status === 'no_show').length;
+            const noshow = reservasTurno.filter(x => x.status === 'no_show').length;
             
             // Cálculo de cadeiras extras
             const usedExtras = ativas.reduce((s, x) => s + (x.cadeiras_extras || 0), 0);
@@ -1662,8 +1908,58 @@
             document.getElementById('stat-livres').textContent = livres;
             document.getElementById('stat-ocup').textContent = ocup + '%';
             document.getElementById('stat-noshow').textContent = noshow;
+            const ordChegada = STATE.reservas.filter(r => r.status === 'ordem_chegada').length;
             document.getElementById('count-mapa').textContent = ativas.length;
             document.getElementById('count-lista').textContent = STATE.reservas.length;
+            document.getElementById('count-espera').textContent = STATE.espera.filter(e => e.status === 'esperando').length;
+        }
+
+        async function verificarAtrasos() {
+            console.log('--- Iniciando Verificação de Atrasos ---');
+            const hoje = new Date();
+            const diaSemana = hoje.getDay();
+            const dataIso = document.getElementById('data-selecionada').value;
+            const hojeStr = obterDataHoje();
+            
+            console.log('Data Selecionada:', dataIso);
+            console.log('Data Local (Hoje):', hojeStr);
+
+            // Só verifica se for a data de hoje local
+            if (dataIso !== hojeStr) {
+                console.log('Ignorando: Data selecionada não é hoje.');
+                return;
+            }
+
+            const configDia = STATE.horarios.find(h => h.dia_semana === diaSemana);
+            const tol = configDia?.tolerancia || 15;
+            const agoraMin = hoje.getHours() * 60 + hoje.getMinutes();
+
+            console.log(`Buscando reservas... Total: ${STATE.reservas.length}`);
+
+            for (const res of STATE.reservas) {
+                if (res.status === 'confirmada') {
+                    const [hStr, mStr] = res.horario.split(':');
+                    const resMin = parseInt(hStr) * 60 + parseInt(mStr);
+                    
+                    console.log(`Mesa ${res.mesa_id}: Agendado ${resMin}m (Horário: ${res.horario}), Agora ${agoraMin}m, Tol ${tol}m`);
+
+                    if (agoraMin > (resMin + tol)) {
+                        console.log(`!!! ATRASO DETECTADO NA MESA ${res.mesa_id} !!!`);
+                        try {
+                            const novaObs = (res.observacoes ? res.observacoes + ' | ' : '') + 'Mesa disponibilizada para ordem de chegada por exceder a tolerância';
+                            await sbPatch('restaurant_reservas', `id=eq.${res.id}`, { 
+                                status: 'ordem_chegada', 
+                                observacoes: novaObs,
+                                updated_at: new Date().toISOString()
+                            });
+                            res.status = 'ordem_chegada';
+                            res.observacoes = novaObs;
+                            toast(`Mesa ${res.mesa_id} agora em Ordem de Chegada`, 'info');
+                        } catch (e) { console.error('Erro ao auto-atualizar atraso:', e); }
+                    }
+                }
+            }
+            console.log('--- Fim da Verificação ---');
         }
 
 
@@ -1783,7 +2079,7 @@
             container.appendChild(group);
         }
 
-        function reserva_existe(s) { return s && ['confirmada', 'aguardando', 'ocupada'].includes(s); }
+        function reserva_existe(s) { return s && ['confirmada', 'aguardando', 'ocupada', 'ordem_chegada'].includes(s); }
 
         function renderMapa() {
             const container = document.getElementById('mesas-container');
@@ -1796,7 +2092,8 @@
             }
 
             const reservaMap = {};
-            STATE.reservas.forEach(r => { if (reserva_existe(r.status)) reservaMap[r.mesa_id] = r; });
+            const reservasTurno = getReservasTurno();
+            reservasTurno.forEach(r => { if (reserva_existe(r.status)) reservaMap[r.mesa_id] = r; });
 
             // ZONA SUPERIOR
             (function () {
@@ -1859,7 +2156,10 @@
             const t = document.getElementById('search-input').value.toLowerCase();
             const s = document.getElementById('filter-status').value;
             const c = document.getElementById('filter-cap').value;
-            STATE.filtrados = STATE.reservas.filter(r => {
+            
+            const reservasTurno = getReservasTurno(STATE.reservas);
+            
+            STATE.filtrados = reservasTurno.filter(r => {
                 const m = STATE.mesas.find(x => x.id === r.mesa_id);
                 if (t && !r.nome.toLowerCase().includes(t) && !r.telefone.includes(t)) return false;
                 if (s && r.status !== s) return false;
@@ -1875,7 +2175,14 @@
                 tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">🍽️</div><h3>Nenhuma reserva</h3></div></td></tr>`;
                 return;
             }
-            const labels = { confirmada: 'Confirmada', aguardando: 'Aguardando', ocupada: 'Ocupada', cancelada: 'Cancelada', no_show: 'No-show' };
+            const labels = { 
+                confirmada: 'Confirmada', 
+                aguardando: 'Aguardando', 
+                ocupada: 'Ocupada', 
+                cancelada: 'Cancelada', 
+                no_show: 'No-show', 
+                ordem_chegada: 'Ordem de chegada' 
+            };
             tbody.innerHTML = STATE.filtrados.map(res => {
                 const m = STATE.mesas.find(x => x.id === res.mesa_id);
                 return `<tr>
@@ -1884,7 +2191,12 @@
       <td><span style="font-family:var(--font-mono);font-size:.80rem">${res.horario?.substring(0, 5)}</span></td>
       <td>👥 <strong>${res.total_pessoas}</strong> <span style="font-size:.68rem;color:var(--text3)">${res.adultos}A·${res.criancas}C</span></td>
       <td><span style="font-family:var(--font-mono);font-size:.78rem">${res.telefone}</span></td>
-      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;color:var(--text2)">${res.observacoes || '–'}</td>
+      <td>
+        <input type="text" class="input-obs-lista" value="${res.observacoes || ''}" 
+               placeholder="Adicionar obs..." 
+               onblur="salvarObsDireto('${res.id}', this.value)" 
+               onkeydown="if(event.key==='Enter') this.blur()">
+      </td>
       <td><span class="status-pill status-${res.status}">${labels[res.status] || res.status}</span></td>
       <td><div class="actions-cell">
         <button class="btn-icon accent" title="Detalhes" onclick="abrirDetalhe(STATE.reservas.find(r=>r.id==='${res.id}'))">👁</button>
@@ -1896,12 +2208,39 @@
             }).join('');
         }
 
+        async function salvarObsDireto(id, novaObs) {
+            const res = STATE.reservas.find(r => r.id === id);
+            if (!res || res.observacoes === novaObs) return;
+            
+            try {
+                await sbPatch('restaurant_reservas', `id=eq.${id}`, { 
+                    observacoes: novaObs,
+                    updated_at: new Date().toISOString()
+                });
+                res.observacoes = novaObs;
+                toast('Observação atualizada ✓', 'success');
+            } catch (e) {
+                toast('Erro ao salvar obs', 'error');
+                console.error(e);
+            }
+        }
+
         // ─── NOVA RESERVA ───
         function abrirModalNovaReserva(mesaPre = null) {
             document.getElementById('modal-reserva-title').textContent = 'Nova Reserva';
             document.getElementById('edit-reserva-id').value = '';
-            document.getElementById('res-data').value = document.getElementById('data-selecionada').value;
-            document.getElementById('res-horario').value = '19:00';
+            const dataSel = document.getElementById('data-selecionada').value;
+            document.getElementById('res-data').value = dataSel;
+            
+            // Horário padrão baseado no turno
+            const diaSemana = new Date(dataSel + 'T12:00:00').getDay();
+            const configDia = STATE.horarios.find(h => h.dia_semana === diaSemana);
+            if (STATE.turno_selecionado === 2 && configDia?.abertura_2) {
+                document.getElementById('res-horario').value = configDia.abertura_2.substring(0, 5);
+            } else {
+                document.getElementById('res-horario').value = configDia?.abertura?.substring(0, 5) || '12:00';
+            }
+
             document.getElementById('res-nome').value = '';
             document.getElementById('res-telefone').value = '';
             document.getElementById('res-adultos').value = 2;
@@ -1941,7 +2280,11 @@
         function popularSelectMesas(sel = null) {
             const s = document.getElementById('res-mesa');
             const data = document.getElementById('res-data').value || document.getElementById('data-selecionada').value;
-            const ocup = new Set(STATE.reservas.filter(r => r.data_reserva === data && ['confirmada', 'aguardando', 'ocupada'].includes(r.status)).map(r => r.mesa_id));
+            
+            // Filtra ocupação considerando o turno ativo para mostrar se a mesa está livre naquele horário
+            const reservasTurno = getReservasTurno(STATE.reservas);
+            const ocup = new Set(reservasTurno.filter(r => r.data_reserva === data && ['confirmada', 'aguardando', 'ocupada', 'ordem_chegada'].includes(r.status)).map(r => r.mesa_id));
+            
             s.innerHTML = '<option value="">🤖 Automática</option>';
             STATE.mesas.filter(m => m.ativa).forEach(m => {
                 const o = document.createElement('option');
@@ -2138,6 +2481,112 @@
             catch (e) { toast('Erro: ' + e.message, 'error'); }
         }
 
+        // ─── LISTA DE ESPERA ───
+        async function carregarEspera() {
+            const data = document.getElementById('data-selecionada').value;
+            if (!data) return;
+            try {
+                STATE.espera = await sbGet('restaurant_espera', `restaurante_id=eq.${RESTAURANTE_ID}&data=eq.${data}&order=created_at.asc`);
+                STATE.esperaFiltrada = [...STATE.espera];
+                renderEspera();
+            } catch (e) { console.error('Erro ao carregar espera:', e); }
+        }
+
+        function abrirModalEspera() {
+            document.getElementById('esp-nome').value = '';
+            document.getElementById('esp-pessoas').value = 2;
+            document.getElementById('esp-obs').value = '';
+            abrirModal('modal-espera');
+        }
+
+        async function salvarEspera() {
+            const nome = document.getElementById('esp-nome').value.trim();
+            const pessoas = parseInt(document.getElementById('esp-pessoas').value) || 0;
+            const obs = document.getElementById('esp-obs').value.trim();
+            const data = document.getElementById('data-selecionada').value;
+
+            if (!nome || pessoas < 1) { toast('Preencha o nome e quantidade', 'error'); return; }
+
+            const payload = { restaurante_id: RESTAURANTE_ID, data, nome, total_pessoas: pessoas, observacoes: obs, status: 'esperando' };
+
+            try {
+                await sbPost('restaurant_espera', payload);
+                toast('Adicionado à fila ✓', 'success');
+                fecharModal('modal-espera');
+                await carregarEspera();
+            } catch (e) { toast('Erro: ' + e.message, 'error'); }
+        }
+
+        function filtrarEspera() {
+            const t = document.getElementById('search-espera').value.toLowerCase();
+            STATE.esperaFiltrada = STATE.espera.filter(e => e.nome.toLowerCase().includes(t));
+            renderEspera();
+        }
+
+        function renderEspera() {
+            const tbody = document.getElementById('tbody-espera');
+            if (!STATE.esperaFiltrada.length) {
+                tbody.innerHTML = `<tr><td colspan="6"><div class="empty">Ninguém na espera</div></td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = STATE.esperaFiltrada.map(e => {
+                const inicio = new Date(e.created_at);
+                const fim = e.finalizado_at ? new Date(e.finalizado_at) : new Date();
+                const tempo = Math.floor((fim - inicio) / 60000);
+                
+                const statusLabel = { esperando: 'Aguardando', atendido: 'Atendido', cancelado: 'Desistiu' };
+                
+                return `<tr>
+                    <td><strong>${e.nome}</strong></td>
+                    <td>👥 ${e.total_pessoas}</td>
+                    <td><span style="font-family:var(--font-mono);font-size:.8rem">${tempo} min</span></td>
+                    <td style="font-size:.78rem;color:var(--text2)">${e.observacoes || '–'}</td>
+                    <td><span class="status-pill status-${e.status}">${statusLabel[e.status]}</span></td>
+                    <td>
+                        <div class="actions-cell">
+                            ${e.status === 'esperando' ? `
+                                <button class="btn-icon success" title="Sentar Cliente" onclick="atenderEspera('${e.id}')">✔</button>
+                                <button class="btn-icon danger" title="Marcar Desistência" onclick="cancelarEspera('${e.id}')">✕</button>
+                            ` : '–'}
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+            document.getElementById('count-espera').textContent = STATE.espera.filter(x => x.status === 'esperando').length;
+            
+            // Atualizar Resumo de Estatísticas da Fila
+            const atendidos = STATE.espera.filter(x => x.status === 'atendido').length;
+            const desistencias = STATE.espera.filter(x => x.status === 'cancelado').length;
+            document.getElementById('espera-stats-summary').innerHTML = `
+                <span class="status-pill status-atendido">✓ Atendidos: <strong>${atendidos}</strong></span>
+                <span class="status-pill status-cancelado">✕ Desistiram: <strong>${desistencias}</strong></span>
+            `;
+        }
+
+        async function atenderEspera(id) {
+            const entry = STATE.espera.find(x => x.id === id);
+            if (!entry) return;
+            
+            if (!confirm(`Marcar ${entry.nome} como atendido?`)) return;
+            
+            try {
+                await sbPatch('restaurant_espera', `id=eq.${id}`, { status: 'atendido', finalizado_at: new Date().toISOString() });
+                toast('Cliente atendido ✓', 'success');
+                await carregarEspera();
+            } catch (e) { toast('Erro: ' + e.message, 'error'); }
+        }
+
+        async function cancelarEspera(id) {
+            const entry = STATE.espera.find(x => x.id === id);
+            if (!confirm(`Confirmar desistência de ${entry?.nome}?`)) return;
+            try {
+                await sbPatch('restaurant_espera', `id=eq.${id}`, { status: 'cancelado', finalizado_at: new Date().toISOString() });
+                toast('Desistência registrada', 'warn');
+                await carregarEspera();
+            } catch (e) { toast('Erro: ' + e.message, 'error'); }
+        }
+
         // ─── CONFIG: HORÁRIOS ───
         function renderHorarios() {
             const map = {};
@@ -2147,8 +2596,11 @@
             [0, 1, 2, 3, 4, 5].forEach(dia => {
                 const h = map[dia] || {
                     dia_semana: dia, abertura: '12:00', fechamento: '23:00', ativo: false,
-                    horario_max_reserva: '22:00', horario_limite_espera: '22:30', antecedencia_min_min: 60
+                    horario_max_reserva: '22:00', horario_limite_espera: '22:30', antecedencia_min_min: 60,
+                    tolerancia: (dia >= 1 && dia <= 4) ? 30 : 10
                 };
+                const tol = h.tolerancia ?? ((dia >= 1 && dia <= 4) ? 30 : 10);
+
                 html += `<tr>
       <td style="font-weight:700;font-family:var(--font-title)">${DIAS[dia]}</td>
       <td><label class="toggle"><input type="checkbox" id="h-ativo-${dia}" ${h.ativo ? 'checked' : ''}><span class="toggle-slider"></span></label></td>
@@ -2156,19 +2608,24 @@
       <td><input type="time" id="h-fe-${dia}" value="${h.fechamento || '23:00'}"></td>
       <td><input type="time" id="h-maxres-${dia}" value="${h.horario_max_reserva || '22:00'}" title="Último horário aceito para reserva"></td>
       <td><input type="time" id="h-limespera-${dia}" value="${h.horario_limite_espera || '22:30'}" title="Limite de espera da reserva"></td>
+      <td><input type="number" id="h-tol-${dia}" value="${tol}" style="width:50px; text-align:center"></td>
     </tr>`;
             });
             // Sábado — Duas linhas totalmente independentes
-            const sab = map[6] || {
-                dia_semana: 6, abertura: '12:00', fechamento: '15:00', ativo: false,
-                horario_max_reserva: '22:00', horario_limite_espera: '22:30', antecedencia_min_min: 60,
-                abertura_2: '18:30', fechamento_2: '23:00', ativo_2: false
-            };
-            html += `<tr>
+                const sab = map[6] || {
+                    dia_semana: 6, abertura: '12:00', fechamento: '15:00', ativo: false,
+                    horario_max_reserva: '22:00', horario_limite_espera: '22:30', antecedencia_min_min: 60,
+                    abertura_2: '18:30', fechamento_2: '23:00', ativo_2: false,
+                    tolerancia: 10
+                };
+                const tolSab = sab.tolerancia ?? 10;
+
+                html += `<tr>
       <td style="font-weight:700;font-family:var(--font-title)">Sáb <span style="font-size:.65rem;color:var(--primary);display:block;font-weight:600">☀ Almoço</span></td>
       <td><label class="toggle"><input type="checkbox" id="h-ativo-6" ${sab.ativo ? 'checked' : ''}><span class="toggle-slider"></span></label></td>
       <td><input type="time" id="h-ab-6" value="${sab.abertura || '12:00'}"></td>
       <td><input type="time" id="h-fe-6" value="${sab.fechamento || '15:00'}"></td>
+      <td style="color:var(--text3);font-size:.7rem;text-align:center">—</td>
       <td style="color:var(--text3);font-size:.7rem;text-align:center">—</td>
       <td style="color:var(--text3);font-size:.7rem;text-align:center">—</td>
       <td style="color:var(--text3);font-size:.7rem;text-align:center">—</td>
@@ -2180,6 +2637,7 @@
       <td><input type="time" id="h-fe2-6" value="${sab.fechamento_2 || '23:00'}"></td>
       <td><input type="time" id="h-maxres-6" value="${sab.horario_max_reserva || '22:00'}" title="Último horário aceito para reserva"></td>
       <td><input type="time" id="h-limespera-6" value="${sab.horario_limite_espera || '22:30'}" title="Limite de espera da reserva"></td>
+      <td><input type="number" id="h-tol-6" value="${tolSab}" style="width:50px; text-align:center"></td>
     </tr>`;
             tbody.innerHTML = html;
         }
@@ -2193,12 +2651,13 @@
                 const ativo = document.getElementById(`h-ativo-${dia}`)?.checked ?? false;
                 const mrVal = document.getElementById(`h-maxres-${dia}`)?.value;
                 const leVal = document.getElementById(`h-limespera-${dia}`)?.value;
+                const tolVal = parseInt(document.getElementById(`h-tol-${dia}`)?.value) || 0;
                 if (!abVal || !feVal) continue;
                 const abertura = fmtTime(abVal);
                 const fechamento = fmtTime(feVal);
                 const horario_max_reserva = mrVal ? fmtTime(mrVal) : null;
                 const horario_limite_espera = leVal ? fmtTime(leVal) : null;
-                const payload = { abertura, fechamento, ativo, horario_max_reserva, horario_limite_espera };
+                const payload = { abertura, fechamento, ativo, horario_max_reserva, horario_limite_espera, tolerancia: tolVal };
                 if (dia === 6) {
                     const ab2Val = document.getElementById(`h-ab2-${dia}`)?.value;
                     const fe2Val = document.getElementById(`h-fe2-${dia}`)?.value;
@@ -2249,7 +2708,7 @@
       </div>
       <div style="text-align:center">
         <div style="font-size:.65rem;color:var(--text);font-weight:700;margin-bottom:2px">Manutenção</div>
-        <label class="toggle">
+        <label class="toggle toggle-danger">
           <input type="checkbox" onchange="toggleMesa('${m.id}','em_manutencao',this.checked)" ${m.em_manutencao ? 'checked' : ''}>
           <span class="toggle-slider"></span>
         </label>
