@@ -1804,7 +1804,7 @@
             document.getElementById('btn-turno-2').classList.toggle('active', t === 2);
             renderStats();
             renderMapa();
-            renderLista();
+            filtrarLista();
         }
 
         function hojeData() {
@@ -1861,7 +1861,7 @@
             } catch (e) { STATE.reservas = []; }
             
             await verificarAtrasos();
-            renderStats(); renderMapa(); renderLista();
+            renderStats(); renderMapa(); filtrarLista();
             carregarEspera();
         }
 
