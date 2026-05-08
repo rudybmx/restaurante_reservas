@@ -2344,6 +2344,10 @@
             let mesa;
             if (mesaId) {
                 mesa = STATE.mesas.find(m => m.id === mesaId);
+                if (mesa && !mesa.ativa) {
+                    toast(`Mesa ${mesa.numero} está DESATIVADA e não pode receber reservas no momento.`, 'error');
+                    return;
+                }
                 if (mesa && mesa.em_manutencao) {
                     toast(`Mesa ${mesa.numero} está em MANUTENÇÃO e não pode ser reservada.`, 'error');
                     return;
