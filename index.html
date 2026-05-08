@@ -2102,37 +2102,65 @@
 
             // ZONA SUPERIOR
             (function () {
-                const topY = 88, gapX = 37; let cursor = 10;
+                const topY = 88, gapX = 37, padX = 30; let cursor = 10;
+                
+                // Unificação Mesa 25 e 26
                 const m25 = STATE.mesas.find(m => String(m.numero) === '25');
-                if (m25) buildTable(m25, reservaMap[m25.id], 't8', 5, 5, cursor, topY);
-                cursor += 155 + 60 + gapX;
+                const m26 = STATE.mesas.find(m => String(m.numero) === '26');
+                if (m25 || m26) {
+                    const res25 = reservaMap[m25?.id];
+                    const res26 = reservaMap[m26?.id];
+                    const resUni = res25 || res26;
+                    const mesaBase = res26 ? m26 : (m25 || m26);
+                    const mesaUni = { ...mesaBase, numero: '25-26' };
+                    buildTable(mesaUni, resUni, 't8', 5, 5, cursor, topY, padX);
+                    cursor += 155 + padX * 2 + gapX;
+                }
 
                 ['24', '23', '22', '21', '20', '19'].forEach(num => {
                     const m = STATE.mesas.find(x => String(x.numero) === num);
-                    if (m) buildTable(m, reservaMap[m.id], 't4', 2, 2, cursor, topY);
-                    cursor += 70 + 60 + gapX;
+                    if (m) buildTable(m, reservaMap[m.id], 't4', 2, 2, cursor, topY, padX);
+                    cursor += 70 + padX * 2 + gapX;
                 });
             })();
 
             // ZONA INTERMEDIÁRIA
             (function () {
-                const midY = 298, gapX = 27; let cursor = 10;
+                const midY = 298, gapX = 20, padX = 20; let cursor = 10;
                 const m18 = STATE.mesas.find(m => String(m.numero) === '18');
-                if (m18) buildTable(m18, reservaMap[m18.id], 't6', 4, 3, cursor, midY);
-                cursor += 115 + 60 + gapX;
+                if (m18) buildTable(m18, reservaMap[m18.id], 't6', 4, 3, cursor, midY, padX);
+                cursor += 115 + padX * 2 + gapX;
 
+                // Unificação Mesa 16 e 17
                 const m16 = STATE.mesas.find(m => String(m.numero) === '16');
-                if (m16) buildTable(m16, reservaMap[m16.id], 't8', 5, 5, cursor, midY);
-                cursor += 155 + 60 + gapX;
+                const m17 = STATE.mesas.find(m => String(m.numero) === '17');
+                if (m16 || m17) {
+                    const res16 = reservaMap[m16?.id];
+                    const res17 = reservaMap[m17?.id];
+                    const resUni = res16 || res17;
+                    const mesaBase = res17 ? m17 : (m16 || m17);
+                    const mesaUni = { ...mesaBase, numero: '16-17' };
+                    buildTable(mesaUni, resUni, 't8', 5, 5, cursor, midY, padX);
+                    cursor += 155 + padX * 2 + gapX;
+                }
 
                 ['15', '14', '13', '12'].forEach(num => {
                     const m = STATE.mesas.find(x => String(x.numero) === num);
-                    if (m) buildTable(m, reservaMap[m.id], 't4', 2, 2, cursor, midY);
-                    cursor += 70 + 60 + gapX;
+                    if (m) buildTable(m, reservaMap[m.id], 't4', 2, 2, cursor, midY, padX);
+                    cursor += 70 + padX * 2 + gapX;
                 });
 
+                // Unificação Mesa 10 e 11
                 const m10 = STATE.mesas.find(m => String(m.numero) === '10');
-                if (m10) buildTable(m10, reservaMap[m10.id], 't8', 5, 5, cursor, midY);
+                const m11 = STATE.mesas.find(m => String(m.numero) === '11');
+                if (m10 || m11) {
+                    const res10 = reservaMap[m10?.id];
+                    const res11 = reservaMap[m11?.id];
+                    const resUni = res10 || res11;
+                    const mesaBase = res11 ? m11 : (m10 || m11);
+                    const mesaUni = { ...mesaBase, numero: '10-11' };
+                    buildTable(mesaUni, resUni, 't8', 5, 5, cursor, midY, padX);
+                }
             })();
 
             // ZONA INFERIOR
