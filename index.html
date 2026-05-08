@@ -2110,8 +2110,8 @@
                 if (m25 || m26) {
                     const res25 = reservaMap[m25?.id];
                     const res26 = reservaMap[m26?.id];
-                    const resUni = res25 || res26;
-                    const mesaBase = res26 ? m26 : (m25 || m26);
+                    const resUni = res26 || res25; // Sincronizado com mesaBase
+                    const mesaBase = res26 ? m26 : (res25 ? m25 : (m25 || m26));
                     const mesaUni = { ...mesaBase, numero: '25-26' };
                     buildTable(mesaUni, resUni, 't8', 5, 5, cursor, topY, padX);
                     cursor += 155 + padX * 2 + gapX;
@@ -2137,8 +2137,8 @@
                 if (m16 || m17) {
                     const res16 = reservaMap[m16?.id];
                     const res17 = reservaMap[m17?.id];
-                    const resUni = res16 || res17;
-                    const mesaBase = res17 ? m17 : (m16 || m17);
+                    const resUni = res17 || res16; // Sincronizado com mesaBase
+                    const mesaBase = res17 ? m17 : (res16 ? m16 : (m16 || m17));
                     const mesaUni = { ...mesaBase, numero: '16-17' };
                     buildTable(mesaUni, resUni, 't8', 5, 5, cursor, midY, padX);
                     cursor += 155 + padX * 2 + gapX;
@@ -2156,8 +2156,8 @@
                 if (m10 || m11) {
                     const res10 = reservaMap[m10?.id];
                     const res11 = reservaMap[m11?.id];
-                    const resUni = res10 || res11;
-                    const mesaBase = res11 ? m11 : (m10 || m11);
+                    const resUni = res11 || res10; // Sincronizado com mesaBase
+                    const mesaBase = res11 ? m11 : (res10 ? m10 : (m10 || m11));
                     const mesaUni = { ...mesaBase, numero: '10-11' };
                     buildTable(mesaUni, resUni, 't8', 5, 5, cursor, midY, padX);
                 }
