@@ -1857,7 +1857,7 @@
 
             try {
                 STATE.reservas = await sbGet('restaurant_reservas',
-                    `restaurante_id=eq.${RESTAURANTE_ID}&data_reserva=eq.${dataInput}&status=neq.cancelada&order=horario.asc`);
+                    `restaurante_id=eq.${RESTAURANTE_ID}&data_reserva=eq.${dataInput}&order=horario.asc`);
             } catch (e) { STATE.reservas = []; }
             
             await verificarAtrasos();
