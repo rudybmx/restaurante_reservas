@@ -2365,7 +2365,7 @@
       <td><span class="status-pill status-${res.status}">${labels[res.status] || res.status}</span></td>
       <td><div class="actions-cell">
         <button class="btn-icon accent" title="Detalhes" onclick="abrirDetalhe(STATE.reservas.find(r=>r.id==='${res.id}'))">👁</button>
-        ${res.session_id ? `<button class="btn-icon accent" title="Abrir Chat" onclick="window.open('https://qozt.wts.chat/chat2/sessions/${res.session_id}', '_blank')">💬</button>` : ''}
+        ${res.session_id ? `<a href="https://qozt.wts.chat/chat2/sessions/${res.session_id}" target="_blank" class="btn-icon accent" title="Abrir Chat" style="text-decoration:none">💬</a>` : ''}
         <button class="btn-icon success" title="Sentar" onclick="marcarStatusDireto('${res.id}','ocupada')">✔</button>
         <button class="btn-icon accent" title="Mover" onclick="abrirMoverMesa('${res.id}')">↔</button>
         <button class="btn-icon danger" title="Cancelar" onclick="confirmarCancelamento('${res.id}')">✕</button>
@@ -2599,7 +2599,7 @@
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn btn-ghost btn-sm" onclick="abrirEditarReserva(STATE.reservaAtual)">✏️ Editar</button>
         <button class="btn btn-accent btn-sm" onclick="abrirMoverMesa('${r.id}');fecharModal('modal-detalhe')">↔ Mover Mesa</button>
-        ${r.session_id ? `<button class="btn btn-accent btn-sm" onclick="window.open('https://qozt.wts.chat/chat2/sessions/${r.session_id}', '_blank')">💬 Abrir Chat</button>` : ''}
+        ${r.session_id ? `<a href="https://qozt.wts.chat/chat2/sessions/${r.session_id}" target="_blank" class="btn btn-accent btn-sm" style="text-decoration:none">💬 Abrir Chat</a>` : ''}
         <button class="btn btn-ghost btn-sm" onclick="marcarStatusDireto('${r.id}','no_show')">👻 No-show</button>
       </div>
     </div>`;
